@@ -4,7 +4,10 @@
 * header file
 *
 */
+#ifndef BBO_STRUCTURES_HPP
+#define BBO_STRUCTURES_HPP
 
+#include <vector>
 
 /* struct coordinate
 *
@@ -28,3 +31,5 @@ struct individual{
   std::vector<coordinate> layout;
   double fitness;
 };
+
+#endif
