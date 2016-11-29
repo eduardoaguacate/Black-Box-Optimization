@@ -5,7 +5,7 @@
 */
 
 namespace recombination{
-  std::vector<individual> recombination_1(const std::vector<individual> &individuals,
+  std::vector<individual> recombination_1(
             const std::vector<std::vector<individual>::iterator> &best_individuals,
             KusiakLayoutEvaluator &evaluator);
 }
@@ -27,7 +27,6 @@ namespace recombination{
                            individuals
 */
 std::vector<individual> recombination::recombination_1(
-        const std::vector<individual> &individuals,
         const std::vector<std::vector<individual>::iterator> &best_individuals,
         KusiakLayoutEvaluator &evaluator){
 }
