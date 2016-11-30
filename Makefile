@@ -1,5 +1,5 @@
 CC=g++
-CFLAGS =-Wall -std=c++0x
+CFLAGS =-Wall -w -std=c++0x
 OPTFLAGS=-O2
 INCLUDES=-I$(PWD)
 
