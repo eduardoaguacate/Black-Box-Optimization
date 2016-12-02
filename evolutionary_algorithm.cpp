@@ -5,15 +5,15 @@
 #include "evolutionary_algorithm.hpp"
 
 individual evolutionary_algorithm(WindScenario& wscenario,
-                                  initialization initialize,
-                                  selection select,      
-                                  recombination recombine,
-                                  mutation mutate,
-                                  replacement replace,
+                                  initialization_func initialize,
+                                  selection_func select,      
+                                  recombination_func recombine,
+                                  mutation_func mutate,
+                                  replacement_func replace,
                                   int generations) {
    // Create a layout evaluator
    KusiakLayoutEvaluator kle;
-   kle.inititalize(wscenario);
+   kle.initialize(wscenario);
    
    // intialization step
    std::vector<individual> population = initialize(wscenario, kle);

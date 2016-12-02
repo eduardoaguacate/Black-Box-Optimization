@@ -14,20 +14,21 @@
 class KusiakLayoutEvaluator;
 class WindScenario;
 
-using initialization = std::function<std::vector<individual>(
-                                        WindScenario&,
-                                        KusiakLayoutEvaluator&)>;
-using selection = std::function<std::vector<std::vector<individual>::iterator>(
-                                   const std::vector<individual>&)>;
-using recombination = std::function<std::vector<individual>(
-                                       const std::vector<std::vector<individual>::iterator>&,
-                                       KusiakLayoutEvaluator&)>;
-using mutation = std::function<void(
-                                  individual&,
-                                  KusiakLayoutEvaluator&)>;
-using replacement = std::function<std::vector<individual>(
-                                     const std::vector<individual>&,
-                                     const std::vector<individual>&)>;
+// maybe move these into the function namespaces?
+using initialization_func = std::function<std::vector<individual>(
+					     WindScenario&,
+					     KusiakLayoutEvaluator&)>;
+using selection_func = std::function<std::vector<std::vector<individual>::iterator>(
+					const std::vector<individual>&)>;
+using recombination_func = std::function<std::vector<individual>(
+					    const std::vector<std::vector<individual>::iterator>&,
+					    KusiakLayoutEvaluator&)>;
+using mutation_func = std::function<void(
+				       individual&,
+				       KusiakLayoutEvaluator&)>;
+using replacement_func = std::function<std::vector<individual>(
+					  const std::vector<individual>&,
+					  const std::vector<individual>&)>;
 /*
  * evolutionary_algorithm
  *
@@ -43,11 +44,11 @@ using replacement = std::function<std::vector<individual>(
  * generations - the number of generations until the result is obtained
  */
 individual evolutionary_algorithm(WindScenario& wscenario,
-                                  initialization initialize,
-                                  selection select,      
-                                  recombination recombine,
-                                  mutation mutate,
-                                  replacement replace,
+                                  initialization_func initialize,
+                                  selection_func select,      
+                                  recombination_func recombine,
+                                  mutation_func mutate,
+                                  replacement_func replace,
                                   int generations);
 
 #endif

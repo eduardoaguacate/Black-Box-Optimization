@@ -4,22 +4,50 @@
 * mutation of the evolutionary algorithm.
 */
 
+#include "API/KusiakLayoutEvaluator.h"
+
+#include "structures.hpp"
+
 namespace mutation{
-  void mutation_1(std::vector<individual> &individuals,
-                                      KusiakLayoutEvaluator &evaluator);
-}
-/* mutation_1
-*
-* This implementation does...
-* params:
-*     vector<individual> &individuals : a reference of the population
-*                                        used in the main program.
-*     KusiakLayoutEvaluator &evaluator : a reference of the evaluator variable
-*                                        used in the main program.
-*
-* returns:
-*     void
-*/
-void mutation::mutation_1(std::vector<individual> &individuals,
-                          KusiakLayoutEvaluator &evaluator){
+   /*
+    * mutation::none
+    *
+    * null function in case that we want to try not using any mutation
+    */
+   void none(individual&, KusiakLayoutEvaluator&) {}
+   
+   /*
+    * mutation::creep
+    *
+    * applies creep (incremental mutation) to one individual
+    * creep steps are sampled from a cauchy distribution
+    * the function tests for layout boundaries and re-enforces them
+    *
+    * parameters:
+    * range - the distribution will be (-range, range)
+    * width - the layout width
+    * height - the layout height
+    * individual - the individual to mutate
+    * kle - the evaluator
+    */
+   // TODO: replace width/height with WindScenario&
+   void creep(double range, double width, double height,
+              individual& indiv, KusiakLayoutEvaluator& kle);
+   
+   /*
+    * mutation::random_reset
+    *
+    * applies a mutation which simply resets a random number of coordinates
+    * each x and y coordinate has a chance to be reset independently
+    * reset coordinates are drawn uniformly from 0 to the layout boundaries
+    *
+    * parameters:
+    * chance - probability that a coordinate is reset
+    * width - the layout width
+    * height - the layout height
+    * individual - the individual to mutate
+    */
+   // TODO: replace width/height with WindScenario&
+   void random_reset(float chance, double width, double height,
+                     individual& indiv, KusiakLayoutEvaluator& kle);
 }
