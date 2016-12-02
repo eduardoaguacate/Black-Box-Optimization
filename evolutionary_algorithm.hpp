@@ -1,7 +1,7 @@
 /*
  * evolutionary_algorithm.hpp
  * 
- * contains using definitions for functions
+ * contains type definitions for functions
  * and the evolutionary_algorithm interface
  */
 #ifndef BBO_EVOLUTIONARY_ALGORITHM_HPP
@@ -14,52 +14,40 @@
 class KusiakLayoutEvaluator;
 class WindScenario;
 
-namespace bbo {
-   using initialization = std::function<
-      std::vector<individual>(
-	 WindScenario&,
-	 KusiakLayoutEvaluator&
-	 )>;
-   using selection = std::function<
-      std::vector<std::vector<individual>::iterator>(
-	 const std::vector<individual>&
-	 )>;
-   using recombination = std::function<
-      std::vector<individual>(
-	 const std::vector<individual>&,
-	 const std::vector<std::vector<individual>::iterator>&,
-	 KusiakLayoutEvaluator&
-	 )>;
-   using mutation = std::function<
-      void(
-	 std::vector<individual>&,
-	 KusiakLayoutEvaluator&
-	 )>;
-   using replacement = std::function<
-      std::vector<individual>(
-	 const std::vector<individual>&,
-	 const std::vector<individual>&
-	 )>;
-   /*
-    * evolutionary_algorithm
-    *
-    * executes an evolutionary algorithm with the specified functions
-    *
-    * parameters:
-    * wscenario - the wind scenario to solve
-    * initialize - function which initializes the parameter
-    * select - function which selects the parents
-    * recombine - function which recombines parents
-    * mutate - function which mutates children
-    * replace - function which updates the population
-    */
-   individual evolutionary_algorithm(WindScenario& wscenario,
-				     initialization initialize,
-				     selection select,      
-				     recombination recombine,
-				     mutation mutate,
-				     replacement replace,
-				     int generations);
-}
+using initialization = std::function<std::vector<individual>(
+                                        WindScenario&,
+                                        KusiakLayoutEvaluator&)>;
+using selection = std::function<std::vector<std::vector<individual>::iterator>(
+                                   const std::vector<individual>&)>;
+using recombination = std::function<std::vector<individual>(
+                                       const std::vector<std::vector<individual>::iterator>&,
+                                       KusiakLayoutEvaluator&)>;
+using mutation = std::function<void(
+                                  individual&,
+                                  KusiakLayoutEvaluator&)>;
+using replacement = std::function<std::vector<individual>(
+                                     const std::vector<individual>&,
+                                     const std::vector<individual>&)>;
+/*
+ * evolutionary_algorithm
+ *
+ * executes an evolutionary algorithm with the specified functions
+ *
+ * parameters:
+ * wscenario - the wind scenario to solve
+ * initialize - function which initializes the parameter
+ * select - function which selects the parents
+ * recombine - function which recombines parents
+ * mutate - function which mutates children
+ * replace - function which updates the population
+ * generations - the number of generations until the result is obtained
+ */
+individual evolutionary_algorithm(WindScenario& wscenario,
+                                  initialization initialize,
+                                  selection select,      
+                                  recombination recombine,
+                                  mutation mutate,
+                                  replacement replace,
+                                  int generations);
 
 #endif
