@@ -5,7 +5,10 @@
 */
 
 //STL libraries
-#include <bits/stdc++.h>
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include "math.h"
 
 //API libraries
 #include "API/WindScenario.h"
