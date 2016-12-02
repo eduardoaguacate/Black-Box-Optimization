@@ -3,6 +3,8 @@
 * This namespace will have all of the different implementations of the population
 * mutation of the evolutionary algorithm.
 */
+#ifndef BBO_MUTATION_HPP
+#define BBO_MUTATION_HPP
 
 #include "API/KusiakLayoutEvaluator.h"
 
@@ -51,3 +53,5 @@ namespace mutation{
    void random_reset(float chance, double width, double height,
                      individual& indiv, KusiakLayoutEvaluator& kle);
 }
+
+#endif
