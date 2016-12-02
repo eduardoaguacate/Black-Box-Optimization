@@ -24,8 +24,7 @@ individual evolutionary_algorithm(WindScenario& wscenario,
       
       // recombination, mutation step
       std::vector<individual> children = recombine(parents, kle);
-      for (auto& child : children)
-      {
+      for (auto& child : children) {
          mutate(child, kle);
       }
       
