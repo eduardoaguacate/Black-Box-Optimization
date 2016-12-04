@@ -18,7 +18,7 @@ namespace initialization{
  *
  * !! srand(time(0)); needs to be in the main function !!
  *
- * parameters: int width, int height, int turbines, int pop_size
+ * parameters: WindScenario wscenario, int pop_size
  * return: std::vector<individual> population
  *
  */
@@ -34,8 +34,8 @@ std::vector<individual> initialization_1(WindScenario wscenario,int pop_size);
  * 
  * !! srand(time(0)); needs to be in the main function !!
  *
- * parameters: std::vector<individual> &population
- * 			   double radius, int width, int height
+ * parameters: std::vector<individual> &population,
+ * 			       WindScenario wscenario
  *
  * return: void
  */
