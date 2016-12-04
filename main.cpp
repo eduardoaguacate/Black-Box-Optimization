@@ -1,8 +1,8 @@
 /*  main.cpp
-*
-*   This is the class in which the evolutionary algorithm is going to be run.
-*   Version: 1.0.0
-*/
+ *
+ *   This is the class in which the evolutionary algorithm is going to be run.
+ *   Version: 1.0.0
+ */
 
 //STL libraries
 #include <iostream>
@@ -16,7 +16,7 @@
 
 //Project's libraries
 #include "structures.hpp"
-#include "initialization.hpp"
+#include "initialization.cpp"
 #include "selection.hpp"
 #include "recombination.hpp"
 #include "mutation.hpp"
@@ -24,8 +24,18 @@
 
 int main(int argc, const char * argv[]) {
 
-  WindScenario wscenario(argv[1]);
-  KusiakLayoutEvaluator evaluator;
-  evaluator.initialize(wscenario);
+        string scenario_path = "Scenarios/00.xml";
+        WindScenario wscenario(scenario_path);
+        KusiakLayoutEvaluator evaluator;
+        evaluator.initialize(wscenario);
+
+        std::vector<individual> population =
+                initialization::initialization_2(evaluator,wscenario);
+
+        for (auto it = population.begin(); it < population.end(); it++){
+          cout << it->fitness << endl;
+        }
+
+
 
 }
