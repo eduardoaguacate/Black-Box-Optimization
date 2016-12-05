@@ -4,6 +4,8 @@
 
 #include "evolutionary_algorithm.hpp"
 
+#include "functions.hpp"
+
 individual evolutionary_algorithm(KusiakLayoutEvaluator& evaluator,
                                   WindScenario& wscenario,
                                   initialization_func initialize,
@@ -27,15 +29,21 @@ individual evolutionary_algorithm(KusiakLayoutEvaluator& evaluator,
       for (auto& child : children) {
          mutate(child, evaluator);
       }
+
+      // determine the fitness of the children
+      for (auto& child : children) {
+         auto mat_layout = functions::individual_to_matrix<double>(child.layout);
+         child.fitness = evaluator.evaluate_2014(&mat_layout);
+      }
       
       // replacement step
       population = replace(population, children);
 
       // update the fittest member
       for (auto iter = population.begin(); iter != population.end(); ++iter) {
-	 if (fittest.fitness < iter->fitness) {
-	    fittest = *iter;
-	 }
+         if (fittest.fitness < iter->fitness) {
+            fittest = *iter;
+         }
       }
    }
    

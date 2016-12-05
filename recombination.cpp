@@ -17,8 +17,7 @@ namespace recombination {
       std::mt19937 rng(device());
       
       // combine each parent with the one next to it
-      for (auto it = parents.begin(); it + 1 < parents.end(); ++it)
-      {
+      for (auto it = parents.begin(); it + 1 < parents.end(); ++it) {
          auto& layout_a = (*(it))->layout;
          auto& layout_b = (*(it + 1))->layout;
          
@@ -29,19 +28,13 @@ namespace recombination {
          
          individual child;
          // copy [0, cutoff] turbines from layout a
-         for (std::size_t i = 0; i < cutoff; ++i)
-         {
+         for (std::size_t i = 0; i < cutoff; ++i) {
             child.layout.push_back(layout_a[i]);
          }
          // copy [cutoff, size] turbines from layout b
-         for (std::size_t i = cutoff; i < size; ++i)
-         {
+         for (std::size_t i = cutoff; i < size; ++i) {
             child.layout.push_back(layout_b[i]);
          }
-         
-         // determine the fitness
-         auto mat_layout = functions::individual_to_matrix<double>(child.layout);
-         child.fitness = kle.evaluate_2014(&mat_layout);
 
          children.push_back(child);
       }
