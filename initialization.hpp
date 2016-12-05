@@ -8,6 +8,7 @@
 
 #include "API/KusiakLayoutEvaluator.h"
 #include "structures.hpp"
+#include "functions.cpp"
 
 namespace initialization {
 /* initialization_1

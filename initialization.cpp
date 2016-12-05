@@ -4,37 +4,6 @@
 
 namespace initialization {
 
-
-/* turbine_collides
- *
- * This method checks whether a given coordinate is already used
- * params:
- *      int x : the coordinate x of the turbine
- *      int y : the coordinate y of the turbine
- *      std::vector<coordinate> &layout: the layout with all the coordinates
- *
- * returns:
- *      bool : true if it collides, false otherwise
- */
-bool turbine_collides(double x, double y, std::vector<coordinate> &layout,
-                      double min_distance){
-        for(auto it = layout.begin(); it < layout.end(); ++it) {
-                // If there is already a coordinate with these values, then
-                // it does collide
-                if(it->x == x && it->y == y) {
-                        return true;
-                }
-                // We check the security distance constraint
-                double dif_x = it->x - x;
-                double dif_y = it->y - y;
-                double dist = sqrt(pow(dif_x,2) + pow(dif_y,2));
-                if (dist < min_distance) {
-                        return true;
-                }
-        }
-        return false;
-}
-
 individual create_individual_2(KusiakLayoutEvaluator &evaluator,
                                WindScenario &wscenario){
         // There is a security constraint between turbines, they can't be
@@ -61,33 +30,29 @@ individual create_individual_2(KusiakLayoutEvaluator &evaluator,
         std::uniform_real_distribution<double> dist_width(0.1,width * 1.0);
         std::uniform_real_distribution<double> dist_height(0.1,height * 1.0);
         std::vector<coordinate> layout;
-
-        //This is the layout used by the evaluator
-        Matrix<double> *mat_layout = new Matrix<double>(n_turbines,2);
         // We create all the turbines
         while (count < n_turbines) {
                 double x = dist_width(rng) * factor;
                 double y = dist_height(rng) * factor;
-                // Checks if the coordinate generated collides with any other turbine
-                if(!turbine_collides(x,y,layout,min_distance)) {
+                // Checks if the coordinate generated collides with any other
+                // turbine
+                if(!functions::turbine_collides(x,y,min_distance,layout)) {
                         struct coordinate coord = {
                                 x, //x coordinate
                                 y, //y coordinate
                         };
 
                         layout.push_back(coord);
-                        mat_layout->set(count,0,x);
-                        mat_layout->set(count,1,y);
                         count++;
                 }
         };
         // We calculate the fitness of the individual, or the layout
-        double individual_fitness = evaluator.evaluate_2014(mat_layout);
+        Matrix<double> mat_layout = functions::vector_to_matrix<double>(layout);
+        double individual_fitness = evaluator.evaluate_2014(&mat_layout);
         struct individual indiv = {
                 layout, // The std::vector<coordinate>
                 individual_fitness, // The fitness calculated by the evaluator
         };
-        delete mat_layout;
         return indiv;
 }
 
@@ -95,12 +60,12 @@ std::vector<individual> initialization_2(KusiakLayoutEvaluator &evaluator,
                                          WindScenario &wscenario){
 
         std::vector<individual> population;
-        // This is population number, which is the number of layouts or individual_fitness
-        // we are going to have per generation
+        // This is population number, which is the number of layouts or
+        // individual_fitness we are going to have per generation
 
         int num_population = 30;
 
-        // We start populating the
+        // We start populating
         for(int i = 0; i < num_population; ++i) {
                 struct individual indiv =
                         initialization::create_individual_2(evaluator,wscenario);
