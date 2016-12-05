@@ -47,7 +47,7 @@ individual create_individual_2(KusiakLayoutEvaluator &evaluator,
                 }
         };
         // We calculate the fitness of the individual, or the layout
-        Matrix<double> mat_layout = functions::vector_to_matrix<double>(layout);
+        Matrix<double> mat_layout = functions::individual_to_matrix<double>(layout);
         double individual_fitness = evaluator.evaluate_2014(&mat_layout);
         struct individual indiv = {
                 layout, // The std::vector<coordinate>

@@ -3,30 +3,29 @@
 * This namespace will have all of the different implementations of the population
 * recombination of the evolutionary algorithm.
 */
+#ifndef BBO_RECOMBINATION_HPP
+#define BBO_RECOMBINATION_HPP
 
-namespace recombination{
-  std::vector<individual> recombination_1(
-            const std::vector<std::vector<individual>::iterator> &best_individuals,
-            KusiakLayoutEvaluator &evaluator);
+#include "API/KusiakLayoutEvaluator.h"
+
+#include "structures.hpp"
+
+namespace recombination {
+   /*
+    * recombination::crossover
+    *
+    * recombines parents by crossover
+    * first randomly determines a cutoff from [0, size]
+    * the childs turbines will then be copied from the parents,
+    * turbines with indices [0, cutoff] from parent a, [cutoff, size] from b
+    *
+    * parameters:
+    * parents - the individuals which were selected for mating
+    * kle - the kusiak layout evaluator
+    */
+   std::vector<individual> crossover(
+      const std::vector<std::vector<individual>::iterator>& parents,
+      KusiakLayoutEvaluator& kle);
 }
-/* recombination_1
-*
-* This implementation does...
-* params:
-*     const vector<individual> &individuals : a reference of the selected
-                                              individuals from the population.
-*     const vector<vector<individual>::iterator> &best individuals: a collection
-*                                               of the population's most fitted
-*                                               individuals
-*
-*     KusiakLayoutEvaluator &evaluator : a reference of the evaluator variable
-*                                        used in the main program.
-*
-* returns:
-*     vector<individual> : combines the selected individuals with the best
-                           individuals
-*/
-std::vector<individual> recombination::recombination_1(
-        const std::vector<std::vector<individual>::iterator> &best_individuals,
-        KusiakLayoutEvaluator &evaluator){
-}
+
+#endif
