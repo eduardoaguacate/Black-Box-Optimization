@@ -4,28 +4,25 @@
 
 #include "evolutionary_algorithm.hpp"
 
-individual evolutionary_algorithm(WindScenario& wscenario,
+individual evolutionary_algorithm(KusiakLayoutEvaluator& evaluator,
+                                  WindScenario& wscenario,
                                   initialization_func initialize,
                                   selection_func select,      
                                   recombination_func recombine,
                                   mutation_func mutate,
                                   replacement_func replace,
-                                  int generations) {
-   // Create a layout evaluator
-   KusiakLayoutEvaluator kle;
-   kle.initialize(wscenario);
-   
+                                  int generations) {   
    // intialization step
-   std::vector<individual> population = initialize(wscenario, kle);
+   std::vector<individual> population = initialize(evaluator, wscenario);
    
    for (int g = 0; g < generations; ++g) {
       // selection step
       std::vector<std::vector<individual>::iterator> parents = select(population);
       
       // recombination, mutation step
-      std::vector<individual> children = recombine(parents, kle);
+      std::vector<individual> children = recombine(parents, evaluator);
       for (auto& child : children) {
-         mutate(child, kle);
+         mutate(child, evaluator);
       }
       
       // replacement step
