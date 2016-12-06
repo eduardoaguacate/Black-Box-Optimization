@@ -29,7 +29,7 @@ namespace initialization {
 //
 // 	for (int j = 0; j < pop_size;j++){
 // 		//initiate layout (coordinates)
-// 		for (int i = 0;i < turbines; i++) {
+// 		for (int i = 0;i < wscenario.nturbines; i++) {
 // 			//creates coordinates and puts them into the individual
 // 			coord.x = wscenario.width * (double) rand() / (double) RAND_MAX;
 // 			coord.y = wscenario.height * (double) rand() / (double) RAND_MAX;
