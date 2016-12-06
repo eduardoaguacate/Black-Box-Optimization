@@ -1,27 +1,34 @@
 /* replacement.hpp
-*
-* This namespace has all of the different implementations of the population
-* replacement of the evolutionary algorithm.
-*/
+ *
+ * This namespace has all of the different implementations of the population
+ * replacement of the evolutionary algorithm.
+ */
 
-namespace replacement{
-  std::vector<individual> replacement_1(const std::vector<individual> &old,
-                                      const std::vector<individual> &children);
-}
+#ifndef BBO_REPLACEMENT_HPP
+#define BBO_REPLACEMENT_HPP
+
+#include "structures.hpp"
+#include "Random.cpp"
+
+namespace replacement {
 /* replacement_1
-*
-* This implementation does...
-* params:
-*     const vector<individual> &old : a reference of the current
-*                                             population.
-*     const vector<individual> &children : a reference of the children created
-*                                          in the current iteration
-*
-* returns:
-*     vector<individual> : this is a new population created from both of the
-*                          parameters received
-*/
-std::vector<individual> replacement::replacement_1(
-                                    const std::vector<individual> &old,
-                                    const std::vector<individual> &children){
+ *
+ * This implementation does a survivor selection mechanism, in which the most
+ * fitted members ar eselected, as well as some others randomly, to prevent
+ * the local optimum problem
+ *
+ * params:
+ *     const vector<individual> &old : a reference of the current
+ *                                             population.
+ *     const vector<individual> &children : a reference of the children created
+ *                                          in the current iteration
+ *
+ * returns:
+ *     vector<individual> : this is a new population created from both of the
+ *                          parameters received
+ */
+std::vector<individual> replacement_1(std::vector<individual> &old,
+                                      std::vector<individual> &children);
 }
+
+#endif
