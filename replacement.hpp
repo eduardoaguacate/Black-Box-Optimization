@@ -8,7 +8,8 @@
 #define BBO_REPLACEMENT_HPP
 
 #include "structures.hpp"
-#include "Random.cpp"
+#include "functions.hpp"
+#include "Random.hpp"
 
 namespace replacement {
 /* replacement_1

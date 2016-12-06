@@ -1,6 +1,6 @@
 /*
  * evolutionary_algorithm.hpp
- * 
+ *
  * contains type definitions for functions
  * and the evolutionary_algorithm interface
  */
@@ -27,8 +27,8 @@ using mutation_func = std::function<void(
                                        individual&,
                                        KusiakLayoutEvaluator&)>;
 using replacement_func = std::function<std::vector<individual>(
-                                          const std::vector<individual>&,
-                                          const std::vector<individual>&)>;
+                                       std::vector<individual>&,
+                                       std::vector<individual>&)>;
 /*
  * evolutionary_algorithm
  *
@@ -47,7 +47,7 @@ using replacement_func = std::function<std::vector<individual>(
 individual evolutionary_algorithm(KusiakLayoutEvaluator& evaluator,
                                   WindScenario& wscenario,
                                   initialization_func initialize,
-                                  selection_func select,      
+                                  selection_func select,
                                   recombination_func recombine,
                                   mutation_func mutate,
                                   replacement_func replace,

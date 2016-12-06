@@ -15,7 +15,7 @@ Random::Random (){
 
 int Random::DrawNumber(int min, int max)
 {
-        // The uniform int distribution is created
-        std::uniform_int_distribution<int> distribution(min,max);
-        return distribution(mt19937_eng);
+    // The uniform int distribution is created
+    std::uniform_int_distribution<int> distribution(min,max);
+    return distribution(mt19937_eng);
 }

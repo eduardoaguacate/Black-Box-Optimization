@@ -8,7 +8,7 @@ std::vector<individual> replacement_1(std::vector<individual> &old,
                                       std::vector<individual> &children){
 
         // The new population
-        vector<individual> new_population;
+        std::vector<individual> new_population;
 
         // We sort both vectors according to their fitnesses
         std::sort (old.begin(), old.end(), functions::compare_fitness);
