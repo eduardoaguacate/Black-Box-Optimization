@@ -5,7 +5,9 @@
 //
 
 #ifndef BBO_RANDOM_HPP
-#define BBO_RANDM_HPP
+#define BBO_RANDOM_HPP
+
+#include <random>
 
 class Random {
   public:

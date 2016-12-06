@@ -51,4 +51,15 @@ Matrix<T> individual_to_matrix(std::vector<coordinate> &vector);
 bool compare_fitness(const individual &indiv,const individual &indiv2);
 }
 
+template<typename T>
+Matrix<T> functions::individual_to_matrix(std::vector<coordinate> &vector){
+        int i = 0;
+        Matrix<T> matrix(vector.size(),2);
+        for (auto it = vector.begin(); it < vector.end(); ++it, ++i) {
+                matrix.set(i,0,it->x);
+                matrix.set(i,1,it->y);
+        }
+        return matrix;
+}
+
 #endif

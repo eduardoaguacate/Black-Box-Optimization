@@ -16,7 +16,7 @@ namespace mutation{
     *
     * null function in case that we want to try not using any mutation
     */
-   void none(individual&, KusiakLayoutEvaluator&) {}
+   void none(individual&, KusiakLayoutEvaluator&);
    
    /*
     * mutation::creep

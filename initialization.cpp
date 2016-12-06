@@ -1,8 +1,9 @@
 #include <random>
 #include <vector>
-#include "initialization.hpp"
 #include <stdlib.h>
 #include <time.h>
+
+#include "initialization.hpp"
 
 namespace initialization {
 

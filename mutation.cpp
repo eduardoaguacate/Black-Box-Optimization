@@ -4,6 +4,8 @@
 #include "mutation.hpp"
 
 namespace mutation {
+   void none(individual&, KusiakLayoutEvaluator&) {}
+
    void creep(double range, double width, double height,
               individual& indiv, KusiakLayoutEvaluator& kle) {
       // prepare the rng
