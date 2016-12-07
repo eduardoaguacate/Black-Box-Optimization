@@ -29,11 +29,11 @@ double KusiakLayoutEvaluator::evaluate(Matrix<double>* layout) {
   static double r   = 0.03;
   static double y   = 20;
   static double com = 20000;
-
+  
   double wfr = evaluate_2014(layout);
   if (wfr <= 0) return std::numeric_limits<double>::max();
   int n = layout->rows;
-
+  
   energyCost = (((ct*n+cs*std::floor(n/m))*(0.666667+0.333333*std::exp(-0.00174*n*n))+com*n)/
 	  ((1.0-std::pow(1.0+r, -y))/r)/(8760.0*scenario.wakeFreeEnergy*wfr*n))+0.1/n;
   return energyCost;
@@ -203,7 +203,7 @@ bool KusiakLayoutEvaluator::checkConstraint() {
 	  tpositions->get(i, 0) < scenario.obstacles.get(j, 2) &&
 	  tpositions->get(i, 1) > scenario.obstacles.get(j, 1) &&
 	  tpositions->get(i, 1) < scenario.obstacles.get(j, 3)) {
-	printf("Obstacle %d [%f, %f, %f, %f] violated by turbine %d (%f, %f)\n",
+	printf("Obstacle %d [%f, %f, %f, %f] violated by turbine %d (%f, %f)\n", 
 	       j, scenario.obstacles.get(j, 0), scenario.obstacles.get(j, 1),
 	       scenario.obstacles.get(j, 2), scenario.obstacles.get(j, 3), i);
 	return false;
@@ -224,3 +224,4 @@ bool KusiakLayoutEvaluator::checkConstraint() {
   }
   return true;
 }
+
