@@ -24,7 +24,7 @@ namespace initialization {
  * return: std::vector<individual> population
  *
  */
-std::vector<individual> initialization_1(WindScenario wscenario,int pop_size);
+std::vector<individual> initialization_1(WindScenario &wscenario,int pop_size);
 
 
 /* replace_violations
@@ -41,7 +41,7 @@ std::vector<individual> initialization_1(WindScenario wscenario,int pop_size);
  *
  * return: void
  */
-void replace_violations(std::vector<individual> &population,WindScenario wscenario);
+void replace_violations(std::vector<individual> &population,WindScenario &wscenario);
 
 /* initialization_1
  *

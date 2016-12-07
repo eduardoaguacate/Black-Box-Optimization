@@ -21,7 +21,7 @@ namespace initialization {
  * return: std::vector<individual> population
  *
  */
-std::vector<individual> initialization_1(WindScenario wscenario,int pop_size) {
+std::vector<individual> initialization_1(WindScenario &wscenario,int pop_size) {
 
 	std::vector<individual> population;
 	individual indiv;
@@ -57,7 +57,7 @@ std::vector<individual> initialization_1(WindScenario wscenario,int pop_size) {
  *
  * return: void
  */
-void replace_violations(std::vector<individual> &population,WindScenario wscenario) {
+void replace_violations(std::vector<individual> &population,WindScenario &wscenario) {
 	double radius = wscenario.R * 8.001; //distance must be radius*8
 	//population.at(i).layout.at(j).x
 	//thirst loop to pick an individual, second to pick a coordinate to be checked
