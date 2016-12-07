@@ -1,7 +1,7 @@
 #include <random>
 #include <vector>
 #include <algorithm>
-#include "Random.hpp"
+#include "random.hpp"
 
 Random::Random (){
   // The random device for the random numbers

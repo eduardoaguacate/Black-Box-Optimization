@@ -18,8 +18,6 @@ namespace selection{
  * parameters:  std::vector<individual> &population, int parents_amount
  * return: 	   std::vector<std::vector<individual>::iterator> parent_iterators
  */
-std::vector<std::vector<individual>::iterator> selection::selection_1(
-		 std::vector<individual> &population,int parents_amount) {
-
-}
+std::vector<std::vector<individual>::iterator> selection_1(
+   std::vector<individual> &population,int parents_amount);
 }

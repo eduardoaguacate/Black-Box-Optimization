@@ -6,7 +6,7 @@ set(CMAKE_CXX_STANDARD 11)
 add_library(API API/tinyxml2.cpp API/WindScenario.cpp
   API/WindFarmLayoutEvaluator.cpp API/KusiakLayoutEvaluator.cpp)
 add_library(functions functions.cpp)
-add_library(random Random.cpp)
+add_library(random random.cpp)
 add_library(initialization initialization.cpp)
 add_library(selection selection.cpp)
 add_library(recombination recombination.cpp)

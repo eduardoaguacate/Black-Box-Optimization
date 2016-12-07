@@ -9,7 +9,7 @@
 
 #include "structures.hpp"
 #include "functions.hpp"
-#include "Random.hpp"
+#include "random.hpp"
 
 namespace replacement {
 /* replacement_1
