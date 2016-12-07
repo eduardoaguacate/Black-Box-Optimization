@@ -41,7 +41,7 @@ int main(int argc, const char * argv[]) {
       recombination::crossover,
       std::bind(mutation::creep, 0.5, wscenario.width, wscenario.height, _1, _2),
       replacement::replacement_1,
-      10000);
+      100);
 
 
 
