@@ -23,6 +23,6 @@ bool turbine_collides(double x, double y, double min_distance,
 }
 
 bool compare_fitness(const individual &indiv,const individual &indiv2) {
-        return (indiv.fitness < indiv2.fitness);
+        return (indiv.fitness > indiv2.fitness);
    }
 }

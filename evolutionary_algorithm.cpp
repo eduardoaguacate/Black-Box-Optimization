@@ -16,20 +16,17 @@ individual evolutionary_algorithm(KusiakLayoutEvaluator& evaluator,
                                   int generations) {
    // intialization step
    std::vector<individual> population = initialize(evaluator, wscenario);
-
    // this will store the maximum fittest member
    individual fittest = *population.begin();
 
    for (int g = 0; g < generations; ++g) {
       // selection step
       std::vector<std::vector<individual>::iterator> parents = select(population);
-      std::cout << "Parents  " << parents.size() << std::endl;
       // recombination, mutation step
       std::vector<individual> children = recombine(parents, evaluator);
       for (auto& child : children) {
          mutate(child, evaluator);
       }
-      std::cout << "Children 1 " << children.size() << std::endl;
       // determine the fitness of the children
       KusiakLayoutEvaluator eval;
       eval.initialize(wscenario);
@@ -40,10 +37,9 @@ individual evolutionary_algorithm(KusiakLayoutEvaluator& evaluator,
 
       // replacement step
       population = replace(population, children);
-      std::cout << "Children 2"  <<population.size() << std::endl;
       // update the fittest member
       for (auto iter = population.begin(); iter != population.end(); ++iter) {
-         if (fittest.fitness < iter->fitness) {
+         if (iter->fitness < fittest.fitness) {
             fittest = *iter;
          }
       }

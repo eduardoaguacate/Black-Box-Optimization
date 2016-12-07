@@ -33,25 +33,17 @@ int main(int argc, const char * argv[]) {
   //  auto selection = selection::selection_1(population);
    // This is how you use the evolutionary_algorithm
 
-   auto select_stub = [](std::vector<individual>& pop){
-     std::vector<std::vector<individual>::iterator> parents;
-     for (auto it = pop.begin(); it != pop.end(); ++it){
-       parents.push_back(it);
-     }
-     return parents;
-   };
-
    individual best = evolutionary_algorithm(
       evaluator,
       wscenario,
       initialization::initialization_2,
-      select_stub,
+      std::bind(selection::selection_1,_1,30),
       recombination::crossover,
       std::bind(mutation::creep, 0.5, wscenario.width, wscenario.height, _1, _2),
       replacement::replacement_1,
-      1);
+      10000);
 
 
 
-   std::cout << best.fitness << std::endl;
+   std::cout << "Best " <<best.fitness << std::endl;
 }
