@@ -21,22 +21,37 @@
 #include "evolutionary_algorithm.hpp"
 
 int main(int argc, const char * argv[]) {
-   string scenario_path = "Scenarios/00.xml";
+
+   std::string scenario_path = "../Scenarios/00.xml";
    WindScenario wscenario(scenario_path);
    KusiakLayoutEvaluator evaluator;
    evaluator.initialize(wscenario);
 
    using namespace std::placeholders;
-   // this is how you use the evolutionary_algorithm
+  //  std::vector<individual> population = initialization::initialization_2(evaluator,wscenario);
+  //  std::cout << "1" << std::endl;
+  //  auto selection = selection::selection_1(population);
+   // This is how you use the evolutionary_algorithm
+
+   auto select_stub = [](std::vector<individual>& pop){
+     std::vector<std::vector<individual>::iterator> parents;
+     for (auto it = pop.begin(); it != pop.end(); ++it){
+       parents.push_back(it);
+     }
+     return parents;
+   };
+
    individual best = evolutionary_algorithm(
       evaluator,
       wscenario,
       initialization::initialization_2,
-      selection::selection_1,
+      select_stub,
       recombination::crossover,
       std::bind(mutation::creep, 0.5, wscenario.width, wscenario.height, _1, _2),
       replacement::replacement_1,
-      100);
+      1);
+
+
 
    std::cout << best.fitness << std::endl;
 }

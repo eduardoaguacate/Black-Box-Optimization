@@ -18,7 +18,7 @@ namespace selection{
  * parameters: const std::vector<individual> &population, int parents_amount
  * return: 	   std::vector<individual> parents
  */
-  std::vector<individual> select_parents_direct(const std::vector<individual> &population,int parents_amount);
+  std::vector<std::vector<individual>::iterator> select_parents_direct(std::vector<individual> &population,int parents_amount);
 
 
   std::vector<std::vector<individual>::iterator> selection_1(
