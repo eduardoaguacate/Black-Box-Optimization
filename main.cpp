@@ -23,9 +23,9 @@
 #include <stdlib.h>
 
 int main(int argc, const char * argv[]) {
-   
+
    srand(time(NULL));
-   
+
    std::string scenario_path = "../Scenarios/00.xml";
    WindScenario wscenario(scenario_path);
    KusiakLayoutEvaluator evaluator;

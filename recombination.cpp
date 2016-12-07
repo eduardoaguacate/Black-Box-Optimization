@@ -9,6 +9,13 @@ namespace recombination {
    std::vector<individual> crossover(
       const std::vector<std::vector<individual>::iterator>& parents,
       KusiakLayoutEvaluator& kle) {
+
+      // This is the min distance amogn turbines that must be satisfied
+      double min_distance = 8.0 * kle.scenario.R;
+
+      // This is a factor for placing turbines
+      double factor = min_distance * 1.000001;
+      
       // the return value
       std::vector<individual> children;
 
@@ -35,6 +42,8 @@ namespace recombination {
          for (std::size_t i = cutoff; i < size; ++i) {
             child.layout.push_back(layout_b[i]);
          }
+
+        //  if (!functions::turbine_collides)
 
          children.push_back(child);
       }

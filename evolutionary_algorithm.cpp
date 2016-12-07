@@ -16,6 +16,9 @@ individual evolutionary_algorithm(KusiakLayoutEvaluator& evaluator,
                                   int generations) {
    // intialization step
    std::vector<individual> population = initialize(evaluator, wscenario);
+   for (auto& indiv : population){
+     std::cout << indiv.fitness << endl;
+   }
    // this will store the maximum fittest member
    individual fittest = *population.begin();
 
@@ -43,6 +46,7 @@ individual evolutionary_algorithm(KusiakLayoutEvaluator& evaluator,
             fittest = *iter;
          }
       }
+      std::cout << "Fittest at generation " << g << " : " << fittest.fitness << endl;
    }
 
    return fittest;
