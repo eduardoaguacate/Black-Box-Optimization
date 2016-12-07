@@ -7,7 +7,10 @@
 #include "structures.hpp"
 namespace selection{
 
-/* select_parents_direct
+
+
+
+  /* selection_1
  *
  * The function takes a reference to the current population
  * and the amount of requested parents as parameter
@@ -18,23 +21,8 @@ namespace selection{
  * parameters: const std::vector<individual> &population, int parents_amount
  * return: 	   std::vector<individual> parents
  */
-  std::vector<std::vector<individual>::iterator> select_parents_direct(std::vector<individual> &population,int parents_amount);
+std::vector<std::vector<individual>::iterator> selection_1
+	( std::vector<individual> &population,int parents_amount);
+}
 
 
-  std::vector<std::vector<individual>::iterator> selection_1(
-                                    const std::vector<individual> &individuals);
-}
-/* selection_1
-*
-* This implementation does...
-* params:
-*     const vector<individual> &individuals : a reference of the current
-*                                             population.
-*
-* returns:
-*     vector<vector<individual>::iterator> : contains pointers to the selected
-*                                           individuals
-*/
-std::vector<std::vector<individual>::iterator> selection::selection_1(
-                                    const std::vector<individual> &individuals){
-}
