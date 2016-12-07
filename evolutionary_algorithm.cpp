@@ -31,11 +31,11 @@ individual evolutionary_algorithm(KusiakLayoutEvaluator& evaluator,
       }
       std::cout << "Children 1 " << children.size() << std::endl;
       // determine the fitness of the children
+      KusiakLayoutEvaluator eval;
+      eval.initialize(wscenario);
       for (auto& child : children) {
-        std::cout << "evaluating1 " << child.layout.size() << std::endl;
          auto mat_layout = functions::individual_to_matrix<double>(child.layout);
-         std::cout << "evaluating2" << std::endl;
-         child.fitness = evaluator.evaluate_2014(&mat_layout);
+         child.fitness = eval.evaluate(&mat_layout);
       }
 
       // replacement step
