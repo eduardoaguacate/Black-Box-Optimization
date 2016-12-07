@@ -19,9 +19,13 @@
 #include "mutation.hpp"
 #include "replacement.hpp"
 #include "evolutionary_algorithm.hpp"
+#include <time.h>
+#include <stdlib.h>
 
 int main(int argc, const char * argv[]) {
-
+   
+   srand(time(NULL));
+   
    std::string scenario_path = "../Scenarios/00.xml";
    WindScenario wscenario(scenario_path);
    KusiakLayoutEvaluator evaluator;
