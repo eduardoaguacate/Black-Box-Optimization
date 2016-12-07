@@ -7,22 +7,21 @@
 #include "structures.hpp"
 namespace selection{
 
-/* select_parents_direct
+/* selection_1
  *
  * The function takes a reference to the current population
  * and the amount of requested parents as parameter
  * and returns, based on random tournament and fitness,
- * a vector of individuals containing the parents
+ * a vector of iterators to individuals within the population
+ * containing the parents
  *
  *
- * parameters: const std::vector<individual> &population, int parents_amount
- * return: 	   std::vector<individual> parents
+ * parameters:  std::vector<individual> &population, int parents_amount
+ * return: 	   std::vector<std::vector<individual>::iterator> parent_iterators
+ *
  */
-  std::vector<individual> select_parents_direct(const std::vector<individual> &population,int parents_amount);
-
-
-  std::vector<std::vector<individual>::iterator> selection_1(
-                                    const std::vector<individual> &individuals);
+std::vector<std::vector<individual>::iterator> selection_1(
+                                     std::vector<individual> &populaion,int parents_amount);
 }
 /* selection_1
 *
@@ -36,5 +35,5 @@ namespace selection{
 *                                           individuals
 */
 std::vector<std::vector<individual>::iterator> selection::selection_1(
-                                    const std::vector<individual> &individuals){
+                                     std::vector<individual> &population,int parents_amount){
 }
