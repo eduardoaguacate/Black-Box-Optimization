@@ -6,7 +6,7 @@
 
 #include "structures.hpp"
 namespace selection{
-/* selection_1
+/* selection_1 test
  *
  * The function takes a reference to the current population
  * and the amount of requested parents as parameter
