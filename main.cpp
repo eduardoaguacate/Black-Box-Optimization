@@ -37,7 +37,7 @@ int main(int argc, const char * argv[]) {
       initialization::initialization_2,
       std::bind(selection::selection_1, _1, 30),
       recombination::crossover,
-      std::bind(mutation::random_reset, 0.1, _1, _2),
+      std::bind(mutation::creep, 1000.0, _1, _2),
       replacement::replacement_1,
       10);
 

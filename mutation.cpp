@@ -1,4 +1,4 @@
-#include <iostream>
+#include <algorithm>
 #include <random>
 
 #include "mutation.hpp"
@@ -13,12 +13,19 @@ namespace mutation {
       // the scenario dimensions
       double width = kle.scenario.width;
       double height = kle.scenario.height;
+
+      // the creep range must be at least the min distance, else we might get stuck
+      if (range < 0.0) {
+         range = std::min(range, -min_distance);
+      } else {
+         range = std::max(range, min_distance);
+      }
       
       // prepare the rng
       std::random_device device;
       std::default_random_engine engine(device());
-      // prepare a cauchy distribution
-      std::cauchy_distribution<double> dist(-range, range);      
+      // prepare a distribution
+      std::uniform_real_distribution<double> dist(-range, range);      
 
       std::vector<coordinate> new_layout;
       // apply the randomization to each coordinate pair in the layout
