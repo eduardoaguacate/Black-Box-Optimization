@@ -46,5 +46,8 @@ std::vector<std::vector<individual>::iterator> selection::selection_1(
 		parent_iterators.push_back(highest_fit);
 		tournament_iterators.clear();
 	}
+	
 	return parent_iterators;
 }
+
+

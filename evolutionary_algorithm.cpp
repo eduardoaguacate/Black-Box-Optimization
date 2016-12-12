@@ -16,7 +16,7 @@ individual evolutionary_algorithm(KusiakLayoutEvaluator& evaluator,
                                   replacement_func replace,
                                   int generations) {
    // intialization step
-   std::vector<individual> population = initialize(evaluator, wscenario);
+   std::vector<individual> population = initialize(evaluator, wscenario,30);
    for (auto& indiv : population){
      std::cout << indiv.fitness << endl;
    }

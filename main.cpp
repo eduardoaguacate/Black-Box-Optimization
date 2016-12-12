@@ -30,16 +30,19 @@ int main(int argc, const char * argv[]) {
    KusiakLayoutEvaluator evaluator;
    evaluator.initialize(wscenario);
 
+   
+   
+
    using namespace std::placeholders;
    individual best = evolutionary_algorithm(
       evaluator,
       wscenario,
-      initialization::initialization_2,
+      initialization::initialization_1,
       std::bind(selection::selection_1, _1, 30),
       recombination::crossover,
       std::bind(mutation::creep, 1000.0, _1, _2),
       replacement::replacement_1,
       10);
-
+   
    std::cout << "Best " << best.fitness << std::endl;
 }

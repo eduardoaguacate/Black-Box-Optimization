@@ -4,6 +4,7 @@
 #include <time.h>
 
 #include "initialization.hpp"
+#include "API/Matrix.hpp"
 
 namespace initialization {
 
@@ -21,7 +22,7 @@ namespace initialization {
  * return: std::vector<individual> population
  *
  */
-std::vector<individual> initialization_1(WindScenario &wscenario,int pop_size) {
+std::vector<individual> initialization_1(KusiakLayoutEvaluator &evaluator,WindScenario &wscenario,int pop_size) {
 
 	std::vector<individual> population;
 	individual indiv;
@@ -41,6 +42,7 @@ std::vector<individual> initialization_1(WindScenario &wscenario,int pop_size) {
 		indiv.layout.clear();
 	}
 	initialization::replace_violations(population,wscenario);
+	initialization::evaluate_population(evaluator,population);
 	return population;
 
 }
@@ -112,6 +114,37 @@ void replace_violations(std::vector<individual> &population,WindScenario &wscena
 		}
 	}
 
+}
+/* evaluate_population
+ *
+ * This functions takes the population and the evaluator
+ * as parameter, casts the population's individuals
+ * to matrixes and evaluates them, storing the new fitnesses
+ * in the population structures, no return value;
+ *
+ * parameters: std::vector<individual> &population, WindScenario &wscenario
+ *
+ * return: void
+ *
+*/
+void evaluate_population(KusiakLayoutEvaluator &evaluator,std::vector<individual> &population) {
+	
+
+	//cast to Matrix
+	Matrix<double> test_matrix = new Matrix<double>(population.at(0).layout.size(),2);
+	
+	for(int j = 0;j < population.size();j++) {
+
+	
+		for(int i = 0;i < population.at(j).layout.size();i++) {
+			test_matrix.set(i,0,population.at(j).layout.at(i).x);
+			test_matrix.set(i,1,population.at(j).layout.at(i).y);
+		}
+	population.at(j).fitness =evaluator.evaluate(&test_matrix);
+	
+	}
+	
+	
 }
 individual create_individual_2(KusiakLayoutEvaluator &evaluator,
                                WindScenario &wscenario){

@@ -20,4 +20,7 @@ namespace selection{
  */
 std::vector<std::vector<individual>::iterator> selection_1(
    std::vector<individual> &population,int parents_amount);
+
+std::vector<individual>::iterator get_best_fitness(std::vector<individual> &population);
+std::vector<std::vector<individual>::iterator> get_worst_fitness(std::vector<individual> &population,int amount);
 }

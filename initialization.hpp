@@ -7,6 +7,7 @@
 #define BBO_INITIALIZATION_HPP
 
 #include "API/KusiakLayoutEvaluator.h"
+#include "API/Matrix.hpp"
 #include "structures.hpp"
 #include "functions.hpp"
 
@@ -24,7 +25,7 @@ namespace initialization {
  * return: std::vector<individual> population
  *
  */
-std::vector<individual> initialization_1(WindScenario &wscenario,int pop_size);
+std::vector<individual> initialization_1(KusiakLayoutEvaluator &evaluator,WindScenario &wscenario,int pop_size);
 
 
 /* replace_violations
@@ -43,22 +44,21 @@ std::vector<individual> initialization_1(WindScenario &wscenario,int pop_size);
  */
 void replace_violations(std::vector<individual> &population,WindScenario &wscenario);
 
-/* initialization_1
+/* evaluate_population
  *
- * This implementation does...
- * params:
- *     KusiakLayoutEvaluator &evaluator : a reference of the evaluator variable
- *                                        used in the main program.
- *     WindScenario &wscenario : a reference of the wind scenario variable
- *                               used in the main program.
+ * This functions takes the population and the evaluator
+ * as parameter, casts the population's individuals
+ * to matrixes and evaluates them, storing the new fitnesses
+ * in the population structures, no return value;
  *
- * returns:
- *     vector<individual> : this is a collection of all the different layouts
- *                          that are produced. In other words
- *                          this represents the population.
- */
-std::vector<individual> initialization_1(KusiakLayoutEvaluator &evaluator,
-                                         WindScenario &wscenario);
+ * parameters: std::vector<individual> &population, WindScenario &wscenario
+ *
+ * return: void
+ *
+*/
+void evaluate_population(KusiakLayoutEvaluator &evaluator,std::vector<individual> &population);
+
+
 /* initialization_2
  *
  * This implementation initializes the population for the current generation

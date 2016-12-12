@@ -17,7 +17,7 @@ class WindScenario;
 // maybe move these into the function namespaces?
 using initialization_func = std::function<std::vector<individual>(
                                              KusiakLayoutEvaluator&,
-                                             WindScenario&)>;
+                                             WindScenario&,int)>;
 using selection_func = std::function<std::vector<std::vector<individual>::iterator>(
                                         std::vector<individual>&)>;
 using recombination_func = std::function<std::vector<individual>(
