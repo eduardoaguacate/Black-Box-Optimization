@@ -27,14 +27,10 @@ namespace mutation{
     *
     * parameters:
     * range - the distribution will be (-range, range)
-    * width - the layout width
-    * height - the layout height
     * individual - the individual to mutate
     * kle - the evaluator
     */
-   // TODO: replace width/height with WindScenario&
-   void creep(double range, double width, double height,
-              individual& indiv, KusiakLayoutEvaluator& kle);
+   void creep(double range, individual& indiv, KusiakLayoutEvaluator& kle);
    
    /*
     * mutation::random_reset
@@ -45,13 +41,10 @@ namespace mutation{
     *
     * parameters:
     * chance - probability that a coordinate is reset
-    * width - the layout width
-    * height - the layout height
     * individual - the individual to mutate
+    * kle - the evaluator
     */
-   // TODO: replace width/height with WindScenario&
-   void random_reset(float chance, double width, double height,
-                     individual& indiv, KusiakLayoutEvaluator& kle);
+   void random_reset(float chance, individual& indiv, KusiakLayoutEvaluator& kle);
 }
 
 #endif

@@ -1,5 +1,4 @@
 
-#include <algorithm>
 #include <random>
 
 #include "functions.hpp"
@@ -9,12 +8,6 @@ namespace recombination {
    std::vector<individual> crossover(
       const std::vector<std::vector<individual>::iterator>& parents,
       KusiakLayoutEvaluator& kle) {
-
-      // This is the min distance amogn turbines that must be satisfied
-      double min_distance = 8.0 * kle.scenario.R;
-
-      // This is a factor for placing turbines
-      double factor = min_distance * 1.000001;
       
       // the return value
       std::vector<individual> children;
@@ -24,9 +17,10 @@ namespace recombination {
       std::mt19937 rng(device());
 
       // combine each parent with the one next to it
-      for (auto it = parents.begin(); it + 1 != parents.end(); ++it) {
+      for (auto it = parents.begin(); it != parents.end(); ++it) {
          auto& layout_a = (*(it))->layout;
-         auto& layout_b = (*(it + 1))->layout;
+         auto& layout_b = it + 1 == parents.end() ?
+	    (*(parents.begin()))->layout : (*(it + 1))->layout;
 
          // determine a random cutoff from [0, size]
          std::size_t size = std::min(layout_a.size(), layout_b.size());
@@ -42,8 +36,6 @@ namespace recombination {
          for (std::size_t i = cutoff; i < size; ++i) {
             child.layout.push_back(layout_b[i]);
          }
-
-        //  if (!functions::turbine_collides)
 
          children.push_back(child);
       }

@@ -5,6 +5,7 @@
 #include "evolutionary_algorithm.hpp"
 
 #include "functions.hpp"
+#include "initialization.hpp"
 
 individual evolutionary_algorithm(KusiakLayoutEvaluator& evaluator,
                                   WindScenario& wscenario,
@@ -25,21 +26,22 @@ individual evolutionary_algorithm(KusiakLayoutEvaluator& evaluator,
    for (int g = 0; g < generations; ++g) {
       // selection step
       std::vector<std::vector<individual>::iterator> parents = select(population);
+      
       // recombination, mutation step
       std::vector<individual> children = recombine(parents, evaluator);
       for (auto& child : children) {
-         mutate(child, evaluator);
+	 mutate(child, evaluator);
       }
+      
       // determine the fitness of the children
-      KusiakLayoutEvaluator eval;
-      eval.initialize(wscenario);
       for (auto& child : children) {
          auto mat_layout = functions::individual_to_matrix<double>(child.layout);
-         child.fitness = eval.evaluate(&mat_layout);
+         child.fitness = evaluator.evaluate(&mat_layout);
       }
 
       // replacement step
       population = replace(population, children);
+      
       // update the fittest member
       for (auto iter = population.begin(); iter != population.end(); ++iter) {
          if (iter->fitness < fittest.fitness) {
