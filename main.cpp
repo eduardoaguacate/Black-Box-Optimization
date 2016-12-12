@@ -29,10 +29,8 @@ int main(int argc, const char * argv[]) {
    WindScenario wscenario(argv[1]);
    KusiakLayoutEvaluator evaluator;
    evaluator.initialize(wscenario);
-
+	 
    
-   
-
    using namespace std::placeholders;
    individual best = evolutionary_algorithm(
       evaluator,
@@ -45,4 +43,5 @@ int main(int argc, const char * argv[]) {
       10);
    
    std::cout << "Best " << best.fitness << std::endl;
+
 }
