@@ -5,7 +5,7 @@
  * statistical_comparison
  *
  * compares combinations of different functions
- * for each scenario prints
+ * prints for each scenario (and overall)
  * the combination with the best average
  * and the one with the lowest variance
  *

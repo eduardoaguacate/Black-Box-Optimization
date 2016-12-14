@@ -1,6 +1,7 @@
 #include <cmath>
 #include <iostream>
 #include <limits>
+#include <map>
 #include <string>
 #include <unordered_map>
 
@@ -19,7 +20,7 @@ void statistical_comparison(int pop_size, int generations, int iterations) {
    using namespace std::placeholders;
    // create collections of all functions of each type
    std::unordered_map<std::string, initialization_func> inits = {
-      { "init_2", initialization::initialization_2 },
+      //{ "init_2", initialization::initialization_2 },
       { "init_1", std::bind(initialization::initialization_1, _1, _2, pop_size) }
    };
    std::unordered_map<std::string, selection_func> selects = {
@@ -122,5 +123,63 @@ void statistical_comparison(int pop_size, int generations, int iterations) {
                 << "Name: " << best_var[sc_id].name << std::endl
                 << "Average: " << best_var[sc_id].average << std::endl
                 << "Variance: " << best_var[sc_id].variance << std::endl << std::endl;
+   }
+
+   std::cout << "=== Overall results ===" << std::endl;
+   // count how many times each combination occurs
+   std::unordered_map<std::string, int> best_avg_counts;
+   for (auto& ba_iter : best_avg) {
+      auto bac_iter = best_avg_counts.find(ba_iter.name);
+      if (bac_iter == best_avg_counts.end()) {
+         best_avg_counts.emplace(ba_iter.name, 1);
+      } else {
+         bac_iter->second++;
+      }
+   }
+   std::unordered_map<std::string, int> best_var_counts;
+   for (auto& bv_iter : best_var) {
+      auto bav_iter = best_var_counts.find(bv_iter.name);
+      if (bav_iter == best_var_counts.end()) {
+         best_var_counts.emplace(bv_iter.name, 1);
+      } else {
+         bav_iter->second++;
+      }
+   }
+
+   // create a mapping from counts to names
+   std::multimap<int, std::string> best_avg_order;
+   for (auto& bac_iter : best_avg_counts) {
+      best_avg_order.emplace(bac_iter.second, bac_iter.first);
+   }
+   std::multimap<int, std::string> best_var_order;
+   for (auto& bav_iter : best_var_counts) {
+      best_var_order.emplace(bav_iter.second, bav_iter.first);
+   }
+
+   std::cout << "Most often best average: " << std::endl;
+   int avg_rank = 1;
+   int last_avg_count = 0;
+   auto bao_it = best_avg_order.rbegin();
+   auto bao_end = best_avg_order.rend();
+   for (; bao_it != bao_end; ++bao_it) {
+      std::cout << "Rank " << avg_rank << ":"
+                << bao_it->second << std::endl;
+      if (bao_it->first != last_avg_count) {
+         last_avg_count = bao_it->first;
+         avg_rank++;
+      }
+   }
+   std::cout << "Most often best variance: " << std::endl;
+   int var_rank = 1;
+   int last_var_count = 0;
+   auto bvo_it = best_var_order.rbegin();
+   auto bvo_end = best_var_order.rend();
+   for (; bvo_it != bvo_end; ++bvo_it) {
+      std::cout << "Rank " << var_rank << ":"
+                << bvo_it->second << std::endl;
+      if (bvo_it->first != last_var_count) {
+         last_var_count = bvo_it->first;
+         var_rank++;
+      }
    }
 }
