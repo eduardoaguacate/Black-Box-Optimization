@@ -20,7 +20,7 @@ void statistical_comparison(int pop_size, int generations, int iterations) {
    using namespace std::placeholders;
    // create collections of all functions of each type
    std::unordered_map<std::string, initialization_func> inits = {
-      //{ "init_2", initialization::initialization_2 },
+      { "init_2", initialization::initialization_2 },
       { "init_1", std::bind(initialization::initialization_1, _1, _2, pop_size) }
    };
    std::unordered_map<std::string, selection_func> selects = {
@@ -46,7 +46,7 @@ void statistical_comparison(int pop_size, int generations, int iterations) {
 
    // the number of scenarios to evaluate
    const int NUM_SCENARIOS = 10;
-   std::vector<result> best_avg(NUM_SCENARIOS, { 0.0, 0.0, "" });
+   std::vector<result> best_avg(NUM_SCENARIOS, { 0.0, std::numeric_limits<double>::max(), "" });
    std::vector<result> best_var(NUM_SCENARIOS, { 0.0, std::numeric_limits<double>::max(), "" });
    
    // iterate over all, and determine best average and lowest variance
@@ -100,7 +100,7 @@ void statistical_comparison(int pop_size, int generations, int iterations) {
                      r.variance /= iterations - 1;
                      
                      // update the best results
-                     if (best_avg[sc_id].average < r.average) {
+                     if (best_avg[sc_id].average > r.average) {
                         best_avg[sc_id] = r;
                      }
                      if (best_var[sc_id].variance > r.variance) {
@@ -162,7 +162,7 @@ void statistical_comparison(int pop_size, int generations, int iterations) {
    auto bao_it = best_avg_order.rbegin();
    auto bao_end = best_avg_order.rend();
    for (; bao_it != bao_end; ++bao_it) {
-      std::cout << "Rank " << avg_rank << ":"
+      std::cout << "Rank " << avg_rank << ": "
                 << bao_it->second << std::endl;
       if (bao_it->first != last_avg_count) {
          last_avg_count = bao_it->first;
@@ -175,7 +175,7 @@ void statistical_comparison(int pop_size, int generations, int iterations) {
    auto bvo_it = best_var_order.rbegin();
    auto bvo_end = best_var_order.rend();
    for (; bvo_it != bvo_end; ++bvo_it) {
-      std::cout << "Rank " << var_rank << ":"
+      std::cout << "Rank " << var_rank << ": "
                 << bvo_it->second << std::endl;
       if (bvo_it->first != last_var_count) {
          last_var_count = bvo_it->first;
