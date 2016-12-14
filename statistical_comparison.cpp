@@ -15,7 +15,7 @@
 #include "replacement.hpp"
 #include "evolutionary_algorithm.hpp"
 
-void statistical_comparison(int pop_size, int generations) {
+void statistical_comparison(int pop_size, int generations, int iterations) {
    using namespace std::placeholders;
    // create collections of all functions of each type
    std::unordered_map<std::string, initialization_func> inits = {
@@ -43,9 +43,12 @@ void statistical_comparison(int pop_size, int generations) {
       std::string name;
    };
 
+   // the number of scenarios to evaluate
+   const int NUM_SCENARIOS = 10;
+   std::vector<result> best_avg(NUM_SCENARIOS, { 0.0, 0.0, "" });
+   std::vector<result> best_var(NUM_SCENARIOS, { 0.0, std::numeric_limits<double>::max(), "" });
+   
    // iterate over all, and determine best average and lowest variance
-   result best_avg{ 0.0, 0.0, "" };
-   result best_var{ 0.0, std::numeric_limits<double>::max(), "" };
    for (auto& init : inits) {
       for (auto& select : selects) {
          for (auto& recombine : recombines) {
@@ -54,26 +57,7 @@ void statistical_comparison(int pop_size, int generations) {
                   // some constants
                   const std::string PATH = "../Scenarios/";
                   const std::string EXT = ".xml";
-                  const int NUM_SCENARIOS = 10;
-
-                  // hold the fitness results in a vector
-                  std::vector<double> fitnesses;
-                  // run the algorithm on each scenario (no obstacles for now)
-                  for (int i = 0; i < NUM_SCENARIOS; ++i) {
-                     // create a scenario and an evaluator
-                     WindScenario wscenario(PATH + "0" + std::to_string(i) + EXT);
-                     KusiakLayoutEvaluator evaluator;
-                     evaluator.initialize(wscenario);
-
-                     // determine the fitness for
-                     // this combination of functions and scenario
-                     double fitness = evolutionary_algorithm(
-                        evaluator, wscenario, init.second, select.second,
-                        recombine.second, mutate.second, replace.second,
-                        generations).fitness;
-                     fitnesses.push_back(fitness);
-                  }
-
+                  
                   // create a name for the combination
                   std::string name;
                   name.append(init.first).append(" ")
@@ -81,39 +65,62 @@ void statistical_comparison(int pop_size, int generations) {
                      .append(recombine.first).append(" ")
                      .append(mutate.first).append(" ")
                      .append(replace.first);
-                  
-                  result r{ 0.0, 0.0, name };
-                  // compute the average
-                  for (auto& fitness : fitnesses) {
-                     r.average += fitness;
-                  }
-                  r.average /= NUM_SCENARIOS;
-                  // compute the variance
-                  for (auto& fitness : fitnesses) {
-                     double delta = std::abs(r.average - fitness);
-                     r.variance += delta * delta;
-                  }
-                  r.variance /= NUM_SCENARIOS - 1;
 
-                  // update the best results
-                  if (best_avg.average < r.average) {
-                     best_avg = r;
-                  }
-                  if (best_var.variance > r.variance) {
-                     best_var = r;
+                  // run the algorithm on each scenario (no obstacles for now)
+                  for (int sc_id = 0; sc_id < NUM_SCENARIOS; ++sc_id) {
+                     // create a scenario and an evaluator
+                     WindScenario wscenario(PATH + "0" + std::to_string(sc_id) + EXT);
+                     KusiakLayoutEvaluator evaluator;
+                     evaluator.initialize(wscenario);
+
+                     // hold the fitness results in a vector
+                     std::vector<double> fitnesses;
+                     // determine the average fitness for
+                     // this combination of functions and scenario
+                     for (int j = 0; j < iterations; ++j) {
+                        double fitness = evolutionary_algorithm(
+                           evaluator, wscenario, init.second, select.second,
+                           recombine.second, mutate.second, replace.second,
+                           generations).fitness;
+                        fitnesses.push_back(fitness);
+                     }
+                  
+                     result r{ 0.0, 0.0, name };   
+                     // compute the average
+                     for (auto& fitness : fitnesses) {
+                        r.average += fitness;
+                     }
+                     r.average /= iterations;
+                     // compute the variance
+                     for (auto& fitness : fitnesses) {
+                        double delta = std::abs(r.average - fitness);
+                        r.variance += delta * delta;
+                     }
+                     r.variance /= iterations - 1;
+                     
+                     // update the best results
+                     if (best_avg[sc_id].average < r.average) {
+                        best_avg[sc_id] = r;
+                     }
+                     if (best_var[sc_id].variance > r.variance) {
+                        best_var[sc_id] = r;
+                     }
                   }
                }
             }
          }
       }
    }
-
-   std::cout << "Best average: " << std::endl
-             << "Name: " << best_avg.name << std::endl
-             << "Average: " << best_avg.average << std::endl
-             << "Variance: " << best_avg.variance << std::endl;
-   std::cout << "Best (lowest) variance: " << std::endl
-             << "Name: " << best_var.name << std::endl
-             << "Average: " << best_var.average << std::endl
-             << "Variance: " << best_var.variance << std::endl;
+                                
+   for (int sc_id = 0; sc_id < NUM_SCENARIOS; ++sc_id) {
+      std::cout << "=== Results for scenario " << sc_id << "===" << std::endl;
+      std::cout << "Best average: " << std::endl
+                << "Name: " << best_avg[sc_id].name << std::endl
+                << "Average: " << best_avg[sc_id].average << std::endl
+                << "Variance: " << best_avg[sc_id].variance << std::endl;
+      std::cout << "Best (lowest) variance: " << std::endl
+                << "Name: " << best_var[sc_id].name << std::endl
+                << "Average: " << best_var[sc_id].average << std::endl
+                << "Variance: " << best_var[sc_id].variance << std::endl << std::endl;
+   }
 }

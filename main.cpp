@@ -30,15 +30,17 @@ int main(int argc, const char * argv[]) {
 
    std::string arg1 = argv[1];
    if (arg1 == "statistical_comparison") {
-      int pop_size, generations;
+      int pop_size, generations, iterations;
       
       std::cout << "Enter the population size: " << std::endl;
       std::cin >> pop_size;
       std::cout << "Enter the number of generations: " << std::endl;
       std::cin >> generations;
-      std::cout << "Comparison is being run. This might take a while..." << std::endl;
+      std::cout << "Enter the number of iterations: " << std::endl;
+      std::cin >> iterations;
+      std::cout << "Comparison is being run. This will take a while..." << std::endl;
       
-      statistical_comparison(pop_size, generations);
+      statistical_comparison(pop_size, generations, iterations);
    } else {
       WindScenario wscenario(argv[1]);
       KusiakLayoutEvaluator evaluator;
