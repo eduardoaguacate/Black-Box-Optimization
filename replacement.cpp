@@ -32,14 +32,14 @@ std::vector<individual> replacement_1(std::vector<individual> &old,
         for (int i = 0; i < 5; ++i) {
 
                 // We randomly get a position from the parents
-                auto it = old.begin() + rand.DrawNumber(0,old.size() - 1);
+                auto it = old.begin() + rand.DrawNumber<int>(0,old.size() - 1);
                 new_population.push_back(*it);
 
                 //We erase this element so that we dont push back repeated parents
                 old.erase(it);
 
                 // We randomly get a position from the children
-                it = children.begin() + rand.DrawNumber(0,children.size() - 1);
+                it = children.begin() + rand.DrawNumber<int>(0,children.size() - 1);
                 new_population.push_back(*it);
 
                 //We erase this element so that we dont push back repeated children
