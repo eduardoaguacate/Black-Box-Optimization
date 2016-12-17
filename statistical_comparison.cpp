@@ -20,7 +20,7 @@ void statistical_comparison(int pop_size, int generations, int iterations) {
    using namespace std::placeholders;
    // create collections of all functions of each type
    std::unordered_map<std::string, initialization_func> inits = {
-      { "init_2", initialization::initialization_2 },
+       { "init_2", std::bind(initialization::initialization_2,_1,_2, pop_size) },
       { "init_1", std::bind(initialization::initialization_1, _1, _2, pop_size) }
    };
    std::unordered_map<std::string, selection_func> selects = {
@@ -34,7 +34,7 @@ void statistical_comparison(int pop_size, int generations, int iterations) {
       { "random_reset(0.25) ", std::bind(mutation::random_reset, 0.25f, _1, _2) }
    };
    std::unordered_map<std::string, replacement_func> replaces = {
-      { "fitness-based", replacement::replacement_1 }
+      { "fitness-based", std::bind(replacement::replacement_1,_1,_2, pop_size) }
    };
 
    // a struct to hold the result
