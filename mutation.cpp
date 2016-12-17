@@ -50,7 +50,7 @@ namespace mutation {
 	       y -= height;
 	    }
 	 }
-	 while (functions::turbine_collides(x, y, min_distance, new_layout));
+	 while (functions::turbine_collides(x, y, kle, new_layout));
 	 new_layout.push_back({ x, y });
       }
       
@@ -82,7 +82,7 @@ namespace mutation {
 	       coords.y = hdist(engine);
 	    }
 	 }
-	 while (functions::turbine_collides(coords.x, coords.y, min_distance, new_layout));
+	 while (functions::turbine_collides(coords.x, coords.y, kle, new_layout));
 	 new_layout.push_back(coords);
       }
       
