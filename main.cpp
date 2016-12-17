@@ -45,16 +45,16 @@ int main(int argc, const char * argv[]) {
       WindScenario wscenario(argv[1]);
       KusiakLayoutEvaluator evaluator;
       evaluator.initialize(wscenario);	 
-   
+      int pop_size = 30;
       using namespace std::placeholders;
       individual best = evolutionary_algorithm(
          evaluator,
          wscenario,
-         initialization::initialization_2,
-         std::bind(selection::selection_1, _1, 30),
+         std::bind(initialization::initialization_2, _1,_2,pop_size),
+         std::bind(selection::selection_1, _1, pop_size),
          recombination::crossover,
          std::bind(mutation::creep, 1000.0, _1, _2),
-         replacement::replacement_1,
+         std::bind(replacement::replacement_1,_1,_2, pop_size),
          10);
    
       std::cout << "Best " << best.fitness << std::endl;
