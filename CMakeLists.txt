@@ -17,7 +17,7 @@ add_library(statistical_comparison statistical_comparison.cpp)
 
 add_executable (main main.cpp)
 target_link_libraries(functions API)
-target_link_libraries(initialization functions)
+target_link_libraries(initialization functions random)
 target_link_libraries(selection functions)
 target_link_libraries(recombination functions)
 target_link_libraries(mutation API)

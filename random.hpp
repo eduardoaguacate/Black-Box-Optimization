@@ -30,7 +30,7 @@ class Random {
     *       T : a randomly generated number (the typename T) from min to max
     */
     template<typename T>
-    T DrawNumber(int min, int max);
+    T DrawNumber(double min, double max);
 
   private:
       //The Mersenne Twister random number generator
@@ -38,7 +38,7 @@ class Random {
 };
 
 template<typename T>
-T Random::DrawNumber(int min, int max)
+T Random::DrawNumber(double min, double max)
 {
     // The typename T is verified
     if (strcmp(typeid(T).name(),"i") == 0){
