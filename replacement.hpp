@@ -33,6 +33,23 @@ namespace replacement {
     std::vector<individual> replacement_1(std::vector<individual> &old,
                                           std::vector<individual> &children,
                                           int num_population);
+
+   /* replacement::age_based
+    * 
+    * implements age-based replacement, aka just population = children
+    *
+    * params:
+    * old - the old population, will be discarded
+    * children - the children, will make up the new population
+    * num_population - the population number, which is the number of layouts or
+    *                  individuals we have per generation
+    *
+    * returns:
+    * the new population
+    */
+   std::vector<individual> age_based(std::vector<individual>& old,
+                                     std::vector<individual>& children,
+                                     int num_population);
 }
 
 #endif
