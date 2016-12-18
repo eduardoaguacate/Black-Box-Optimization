@@ -13,5 +13,17 @@ Random::Random (){
 
 }
 
+template <>
+int Random::DrawNumber(int min, int max) {
+   // The uniform int distribution is created
+   std::uniform_int_distribution<int> distribution(min,max);
+   return distribution(mt19937_eng);
+}
 
+template <>
+double Random::DrawNumber(double min, double max) {
+   // The uniform int distribution is created
+   std::uniform_real_distribution<double> distribution(min,max);
+   return distribution(mt19937_eng);
+}
 

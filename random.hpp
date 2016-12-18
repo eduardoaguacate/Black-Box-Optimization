@@ -30,28 +30,11 @@ class Random {
     *       T : a randomly generated number (the typename T) from min to max
     */
     template<typename T>
-    T DrawNumber(double min, double max);
+    T DrawNumber(T min, T max);
 
   private:
       //The Mersenne Twister random number generator
       std::mt19937 mt19937_eng;
 };
-
-template<typename T>
-T Random::DrawNumber(double min, double max)
-{
-    // The typename T is verified
-    if (strcmp(typeid(T).name(),"i") == 0){
-        // The uniform int distribution is created
-        std::uniform_int_distribution<int> distribution(min,max);
-        return distribution(mt19937_eng);
-    }
-    else{
-        // The uniform real distribution is created
-        std::uniform_real_distribution<T> distribution(min,max);
-        return distribution(mt19937_eng);
-    }
-}
-
 
 #endif
