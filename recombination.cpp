@@ -5,6 +5,19 @@
 #include "recombination.hpp"
 
 namespace recombination {
+   std::vector<individual> none(
+      const std::vector<std::vector<individual>::iterator>& parents,
+      KusiakLayoutEvaluator& kle) {
+      
+      std::vector<individual> children;
+      // just copy all the parents
+      for (auto& parent : parents)
+      {
+         children.push_back(*parent);
+      }
+      return children;
+   }
+   
    std::vector<individual> crossover(
       const std::vector<std::vector<individual>::iterator>& parents,
       KusiakLayoutEvaluator& kle) {

@@ -8,8 +8,6 @@
 #define BBO_REPLACEMENT_HPP
 
 #include "structures.hpp"
-#include "functions.hpp"
-#include "random.hpp"
 
 namespace replacement {
     /* replacement_1
@@ -41,15 +39,12 @@ namespace replacement {
     * params:
     * old - the old population, will be discarded
     * children - the children, will make up the new population
-    * num_population - the population number, which is the number of layouts or
-    *                  individuals we have per generation
     *
     * returns:
     * the new population
     */
    std::vector<individual> age_based(std::vector<individual>& old,
-                                     std::vector<individual>& children,
-                                     int num_population);
+                                     std::vector<individual>& children);
 }
 
 #endif

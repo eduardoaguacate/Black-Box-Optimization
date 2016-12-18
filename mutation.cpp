@@ -25,7 +25,7 @@ namespace mutation {
       std::random_device device;
       std::default_random_engine engine(device());
       // prepare a distribution
-      std::uniform_real_distribution<double> dist(-range, range);      
+      std::uniform_real_distribution<double> dist(-range, range);
 
       std::vector<coordinate> new_layout;
       // apply the randomization to each coordinate pair in the layout

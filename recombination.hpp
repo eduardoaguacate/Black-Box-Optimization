@@ -12,6 +12,15 @@
 
 namespace recombination {
    /*
+    * recombination::null
+    *
+    * a null recombination, aka just copying parents
+    */
+   std::vector<individual> none(
+      const std::vector<std::vector<individual>::iterator>& parents,
+      KusiakLayoutEvaluator& kle);
+   
+   /*
     * recombination::crossover
     *
     * recombines parents by crossover

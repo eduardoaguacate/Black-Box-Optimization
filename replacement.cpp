@@ -1,7 +1,11 @@
 #include <random>
 #include <vector>
 #include <algorithm>
+
 #include "replacement.hpp"
+
+#include "functions.hpp"
+#include "random.hpp"
 
 namespace replacement {
    std::vector<individual> replacement_1(std::vector<individual> &old,
@@ -65,8 +69,7 @@ namespace replacement {
    }
 
    std::vector<individual> age_based(std::vector<individual>& old,
-                                     std::vector<individual>& children,
-                                     int num_population) {
+                                     std::vector<individual>& children) {
       return children;
    }
 }

@@ -20,21 +20,24 @@ void statistical_comparison(int pop_size, int generations, int iterations) {
    using namespace std::placeholders;
    // create collections of all functions of each type
    std::unordered_map<std::string, initialization_func> inits = {
-       { "init_2", std::bind(initialization::initialization_2,_1,_2, pop_size) },
+      { "init_2", std::bind(initialization::initialization_2, _1, _2, pop_size) },
       { "init_1", std::bind(initialization::initialization_1, _1, _2, pop_size) }
    };
    std::unordered_map<std::string, selection_func> selects = {
       { "tournament", std::bind(selection::selection_1, _1, pop_size) }
    };
    std::unordered_map<std::string, recombination_func> recombines = {
+      { "no_recombination", recombination::none }, 
       { "crossover", recombination::crossover }
    };
    std::unordered_map<std::string, mutation_func> mutates = {
+      { "no_mutation", mutation::none },
       { "creep(1000)", std::bind(mutation::creep, 1000.0, _1, _2) },
       { "random_reset(0.25) ", std::bind(mutation::random_reset, 0.25f, _1, _2) }
    };
    std::unordered_map<std::string, replacement_func> replaces = {
-      { "fitness-based", std::bind(replacement::replacement_1,_1,_2, pop_size) }
+      { "fitness-based", std::bind(replacement::replacement_1, _1, _2, pop_size) },
+      { "age-based", replacement::age_based }
    };
 
    // a struct to hold the result
