@@ -132,7 +132,7 @@ namespace initialization {
         
 
         //cast to Matrix
-        Matrix<double> test_matrix = new Matrix<double>(population.at(0).layout.size(),2);
+        Matrix<double> test_matrix(population.at(0).layout.size(),2);
         
         for(int j = 0;j < population.size();j++) {
 
@@ -141,7 +141,7 @@ namespace initialization {
                 test_matrix.set(i,0,population.at(j).layout.at(i).x);
                 test_matrix.set(i,1,population.at(j).layout.at(i).y);
             }
-        population.at(j).fitness =evaluator.evaluate(&test_matrix);
+            population.at(j).fitness = evaluator.evaluate(&test_matrix);
         
         }
         
@@ -169,28 +169,25 @@ namespace initialization {
         
         int count = 0;
         // We create all the turbines
+        individual indiv;
         while (count < n_turbines) {
             double x = rand.DrawNumber<double>(0, width) * factor;
             double y = rand.DrawNumber<double>(0, height) * factor;
             // Checks if the coordinate generated collides with any other
             // turbine
-            if(!functions::turbine_collides(x, y, evaluator, layout)) {
+            if(!functions::turbine_collides(x, y, evaluator, indiv.layout)) {
                 struct coordinate coord = {
                     x, //x coordinate
                     y, //y coordinate
                 };
 
-                layout.push_back(coord);
+                indiv.layout.push_back(coord);
                 count++;
             }
         };
         // We calculate the fitness of the individual, or the layout
-        Matrix<double> mat_layout = functions::individual_to_matrix<double>(layout);
-        double individual_fitness = evaluator.evaluate(&mat_layout);
-        struct individual indiv = {
-            layout, // The std::vector<coordinate>
-            individual_fitness, // The fitness calculated by the evaluator
-        };
+        Matrix<double> mat_layout = functions::individual_to_matrix<double>(indiv.layout);
+        indiv.fitness = evaluator.evaluate(&mat_layout);
         return indiv;
     }
 

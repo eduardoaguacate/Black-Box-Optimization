@@ -32,6 +32,8 @@ individual evolutionary_algorithm(KusiakLayoutEvaluator& evaluator,
       for (auto& child : children) {
 	 mutate(child, evaluator);
       }
+
+      initialization::replace_violations(children, wscenario);
       
       // determine the fitness of the children
       for (auto& child : children) {

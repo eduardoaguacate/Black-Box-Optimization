@@ -24,8 +24,8 @@ bool turbine_collides(double x, double y,
         }
         
         // We check the obstacle constraint
+        Matrix<double>& matObstacles = evaluator.scenario.obstacles;
         for (int j = 0; j < evaluator.scenario.obstacles.rows; j++) {
-            Matrix<double> matObstacles = evaluator.scenario.obstacles;
             // If somehow the position of a turbine is within the range
             // of an obstacle, then it collides, and it's an invalid turbine
             if (it->x > matObstacles.get(j, 0) &&
