@@ -27,6 +27,18 @@ namespace functions {
     bool turbine_collides(double x, double y, KusiakLayoutEvaluator &evaluator,
                           std::vector<coordinate> &layout);
 
+    /*
+     * remove_illegal_coordinates
+     * 
+     * removes coordinates which are placed on an obstacle
+     * does nothing if there are no obstacles in the scenario
+     * in practice, this should be balanced with a mechanism to increase the
+     * number of turbines through mutation or recombination
+     * 
+     * params: individual and wind scenario
+     */
+    void remove_illegal_coordinates(individual& indiv, WindScenario& wscenario);
+
     /* vector_to_matrix
      *
      * This method makes a matrix<T> out of a vector<coordinate>

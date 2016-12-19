@@ -47,10 +47,13 @@ namespace recombination {
          //std::size_t size = std::min(layout_a.size(), layout_b.size());
          std::uniform_int_distribution<std::size_t> dist_min(0, min_size);
          std::size_t cutoff = dist_min(rng);
-         // determine a size from min_layout.size() to max_layout.size()
-         // this will be the size of the child layout
-         std::uniform_int_distribution<std::size_t> dist_max(min_size, max_size);
-         std::size_t size = dist_max(rng);
+         // if the size is below the maximum, add some additional turbines
+         // this prevents that we will eventually converge to low turbine individuals
+         std::uniform_int_distribution<std::size_t> dist_over(min_size, kle.scenario.nturbines);
+         std::size_t over = dist_over(rng);
+         std::size_t size = max_size < over ? max_size : over;
+         std::uniform_real_distribution<double> wdist(0.0, kle.scenario.width);
+         std::uniform_real_distribution<double> hdist(0.0, kle.scenario.height); 
 
          individual child;
          // copy [0, cutoff] turbines from min_layout
@@ -60,6 +63,10 @@ namespace recombination {
          // copy [cutoff, size] turbines from max_layout
          for (std::size_t i = cutoff; i < size; ++i) {
             child.layout.push_back(max_layout[i]);
+         }
+         // create [size, over] new turbines
+         for (std::size_t i = size; i < over; ++i) {
+            child.layout.push_back({ wdist(rng), hdist(rng) });
          }
 
          children.push_back(child);

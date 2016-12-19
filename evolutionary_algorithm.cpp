@@ -37,6 +37,7 @@ individual evolutionary_algorithm(KusiakLayoutEvaluator& evaluator,
       
       // determine the fitness of the children
       for (auto& child : children) {
+         functions::remove_illegal_coordinates(child, wscenario);
          auto mat_layout = functions::individual_to_matrix<double>(child.layout);
          child.fitness = evaluator.evaluate(&mat_layout);
       }
