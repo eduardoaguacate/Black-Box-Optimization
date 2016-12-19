@@ -12,13 +12,6 @@
 
 namespace mutation{
    /*
-    * mutation::none
-    *
-    * null function in case that we want to try not using any mutation
-    */
-   void none(individual&, KusiakLayoutEvaluator&);
-   
-   /*
     * mutation::creep
     *
     * applies creep (incremental mutation) to one individual

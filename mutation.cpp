@@ -5,8 +5,6 @@
 #include "functions.hpp"
 
 namespace mutation {
-   void none(individual&, KusiakLayoutEvaluator&) {}
-
    void creep(double range, individual& indiv, KusiakLayoutEvaluator& kle) {
       // This is the min distance among turbines that must be satisfied
       double min_distance = 8.0 * kle.scenario.R;
@@ -70,7 +68,7 @@ namespace mutation {
       // prepare the distributions
       std::uniform_real_distribution<float> cdist(0.f, 1.f);
       std::uniform_real_distribution<double> wdist(0.0, width);
-      std::uniform_real_distribution<double> hdist(0.0, height);
+      std::uniform_real_distribution<double> hdist(0.0, height); 
 
       std::vector<coordinate> new_layout;
       // go through each coordinate pair in the layout

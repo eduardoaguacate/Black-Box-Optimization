@@ -31,7 +31,6 @@ void statistical_comparison(int pop_size, int generations, int iterations) {
       { "crossover", recombination::crossover }
    };
    std::unordered_map<std::string, mutation_func> mutates = {
-      { "no_mutation", mutation::none },
       { "creep(1000)", std::bind(mutation::creep, 1000.0, _1, _2) },
       { "random_reset(0.25) ", std::bind(mutation::random_reset, 0.25f, _1, _2) }
    };
@@ -49,8 +48,10 @@ void statistical_comparison(int pop_size, int generations, int iterations) {
 
    // the number of scenarios to evaluate
    const int NUM_SCENARIOS = 10;
-   std::vector<result> best_avg(NUM_SCENARIOS, { 0.0, std::numeric_limits<double>::max(), "" });
-   std::vector<result> best_var(NUM_SCENARIOS, { 0.0, std::numeric_limits<double>::max(), "" });
+   std::vector<result> best_avg(NUM_SCENARIOS, {
+         std::numeric_limits<double>::max(), 0.0, "" });
+   std::vector<result> best_var(NUM_SCENARIOS, {
+         0.0, std::numeric_limits<double>::max(), "" });
    
    // iterate over all, and determine best average and lowest variance
    for (auto& init : inits) {
@@ -100,7 +101,10 @@ void statistical_comparison(int pop_size, int generations, int iterations) {
                         double delta = std::abs(r.average - fitness);
                         r.variance += delta * delta;
                      }
-                     r.variance /= iterations - 1;
+                     if (iterations > 1)
+                     {
+                        r.variance /= iterations - 1;
+                     }
                      
                      // update the best results
                      if (best_avg[sc_id].average > r.average) {
