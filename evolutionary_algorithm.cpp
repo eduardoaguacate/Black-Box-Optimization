@@ -51,7 +51,7 @@ individual evolutionary_algorithm(KusiakLayoutEvaluator& evaluator,
             fittest = *iter;
          }
       }
-      std::cout << "Fittest at generation " << g << " : " << fittest.fitness << endl;
+      std::cout << "Fittest at generation " << g + 1 << " : " << fittest.fitness << endl;
    }
 
    return fittest;

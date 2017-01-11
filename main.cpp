@@ -45,7 +45,11 @@ int main(int argc, const char * argv[]) {
       WindScenario wscenario(argv[1]);
       KusiakLayoutEvaluator evaluator;
       evaluator.initialize(wscenario);	 
-      int pop_size = 30;
+      int pop_size, generations;
+      std::cout << "Enter the population size: " << std::endl;
+      std::cin >> pop_size;
+      std::cout << "Enter the number of generations: " << std::endl;
+      std::cin >> generations;
       using namespace std::placeholders;
       individual best = evolutionary_algorithm(
          evaluator,
@@ -55,7 +59,7 @@ int main(int argc, const char * argv[]) {
          recombination::crossover,
          std::bind(mutation::random_reset, 0.1, _1, _2),
          std::bind(replacement::replacement_1,_1,_2, pop_size),
-         10);
+         generations);
    
       std::cout << "Best " << best.fitness << std::endl;
    }
