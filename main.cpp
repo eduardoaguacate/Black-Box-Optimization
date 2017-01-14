@@ -54,7 +54,7 @@ int main(int argc, const char * argv[]) {
       individual best = evolutionary_algorithm(
          evaluator,
          wscenario,
-         std::bind(initialization::initialization_1, _1,_2,pop_size),
+         std::bind(initialization::initialization_2, _1,_2,pop_size),
          std::bind(selection::selection_1, _1, pop_size),
          recombination::crossover,
          std::bind(mutation::random_reset, 0.1, _1, _2),

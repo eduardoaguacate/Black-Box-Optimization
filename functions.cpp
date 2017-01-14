@@ -7,37 +7,55 @@ namespace functions {
                          KusiakLayoutEvaluator &evaluator,
                          std::vector<coordinate> &layout){
     
-      // The minimum distance so that they are in the center
-      double min_distance = 8.0 * evaluator.scenario.R;
-      for(auto it = layout.begin(); it < layout.end(); ++it) {
-         // If there is already a coordinate with these values, then
-         // it does collide
-         if(it->x == x && it->y == y) {
-            return true;
-         }
-         // We check the security distance constraint
-         double dif_x = it->x - x;
-         double dif_y = it->y - y;
-         double dist = sqrt(pow(dif_x,2) + pow(dif_y,2));
-         if (dist < min_distance) {
-            return true;
-         }
-        
-         // We check the obstacle constraint
-         Matrix<double>& matObstacles = evaluator.scenario.obstacles;
-         for (int j = 0; j < evaluator.scenario.obstacles.rows; j++) {
+       // We check first whether the coordinate collides with an obstacle
+       if (functions::coordinateCollidesWithObstacles(x, y, evaluator)){
+           return true;
+       }
+       // Turbine does not collide with any obstacle, then we are good to go
+       else{
+           // The minimum distance so that they are in the center
+           double min_distance = 8.0 * evaluator.scenario.R;
+           for(auto it = layout.begin(); it < layout.end(); ++it) {
+               // If there is already a coordinate with these values, then
+               // it does collide
+               if(it->x == x && it->y == y) {
+                   return true;
+               }
+               // We check the security distance constraint
+               double dif_x = it->x - x;
+               double dif_y = it->y - y;
+               double dist = sqrt(pow(dif_x,2) + pow(dif_y,2));
+               if (dist < min_distance) {
+                   return true;
+               }
+               
+           }
+           return false;
+       }
+   }
+    
+    bool coordinateCollidesWithObstacles(double x, double y,
+                                         KusiakLayoutEvaluator &evaluator){
+        // We check whether this coordinate collide with a given obstacle
+        for (int o = 0; o < evaluator.scenario.obstacles.rows; o++) {
+            Matrix<double> matObstacles = evaluator.scenario.obstacles;
             // If somehow the position of a turbine is within the range
             // of an obstacle, then it collides, and it's an invalid turbine
-            if (it->x > matObstacles.get(j, 0) &&
-                it->x < matObstacles.get(j, 2) &&
-                it->y > matObstacles.get(j, 1) &&
-                it->y < matObstacles.get(j, 3)) {
-               return true;
+            double xmin = matObstacles.get(o, 0);
+            double ymin = matObstacles.get(o, 1);
+            double xmax = matObstacles.get(o, 2);
+            double ymax = matObstacles.get(o, 3);
+            if (x > xmin &&
+                x < xmax &&
+                y > ymin &&
+                y < ymax) {
+                return true;
             }
-         }
-      }
-      return false;
-   }
+        }
+        
+        return false;
+    }
+
 
    void remove_illegal_coordinates(individual& indiv, WindScenario& wscenario) {
       // return if there are no obstacles in the scenario

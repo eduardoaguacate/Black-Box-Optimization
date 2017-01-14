@@ -26,6 +26,21 @@ namespace functions {
      */
     bool turbine_collides(double x, double y, KusiakLayoutEvaluator &evaluator,
                           std::vector<coordinate> &layout);
+    
+    /* coordinateCollidesWithObstacles
+     * This method takes the x and y parameters of a coordinate, and the evaluator
+     * to check whether it collides with an obstacle from the scenario
+     * params:
+     *      double x : the coordinate x of the turbine
+     *      double y : the coordinate y of the turbine
+     *      KusiakLayoutEvaluator evaluator :
+     *                                 the KusiakLayoutEvaluator of the api
+     *
+     * returns:
+     *      bool : true if it collides, false otherwise
+     */
+    bool coordinateCollidesWithObstacles(double x, double y,
+                                         KusiakLayoutEvaluator &evaluator);
 
     /*
      * remove_illegal_coordinates

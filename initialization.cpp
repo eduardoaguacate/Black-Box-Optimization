@@ -161,13 +161,33 @@ namespace initialization {
         // These are the farm's constraints
         double width = wscenario.width / factor;
         double height = wscenario.height / factor;
-        int n_turbines = rand.DrawNumber<int>(3.0/4.0 * wscenario.nturbines,
-                                              wscenario.nturbines);
-
-        
         std::vector<coordinate> layout;
         
         int count = 0;
+        int max_n_turbines = 0;
+        
+        // We check how many turbines we can stack up in this scenario, and check how
+        // it compares with the number of turbines given in it
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                double xpos = x * factor;
+                double ypos = y * factor;
+                bool valid = true;
+                Matrix<double> scenario_obstacles = wscenario.obstacles;
+                // We check for obstacle constraints
+                if (!functions::coordinateCollidesWithObstacles(x, y, evaluator)){
+                    max_n_turbines++;
+                }
+            }
+        }
+        // If the max n turbines is more than the scenario's ones,
+        // we take the latter one
+        max_n_turbines = max_n_turbines <= wscenario.nturbines ? max_n_turbines : wscenario.nturbines;
+        
+        int n_turbines = rand.DrawNumber<int>(3.0 / 4.0 * max_n_turbines,
+                                              max_n_turbines);
+        
+        
         // We create all the turbines
         individual indiv;
         while (count < n_turbines) {
