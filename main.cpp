@@ -21,6 +21,7 @@
 #include "replacement.hpp"
 #include "evolutionary_algorithm.hpp"
 #include "statistical_comparison.hpp"
+#include "scenario.hpp"
 #include <time.h>
 #include <stdlib.h>
 
@@ -39,12 +40,14 @@ int main(int argc, const char * argv[]) {
        std::cout << "Enter the number of iterations: " << std::endl;
        std::cin >> iterations;
        std::cout << "Comparison is being run. This will take a while..." << std::endl;
-
-        statistical_comparison(pop_size, generations, iterations);
+       
+       statistical_comparison(pop_size, generations, iterations);
    } else {
        WindScenario wscenario(argv[1]);
        KusiakLayoutEvaluator evaluator;
        evaluator.initialize(wscenario);
+       //Scenario scenario(wscenario);
+       //std::cout << wscenario.nturbines << " : " << scenario.max_turbines << std::endl;
        int pop_size;
        int generations;
        int function;
@@ -54,34 +57,17 @@ int main(int argc, const char * argv[]) {
        std::cin >> generations;
        std::cout << "Enter which initialization function you'll want to use (1/2): " << std::endl;
        std::cin >> function;
-       individual best;
-       if (function == 1){
-           best = evolutionary_algorithm(
-                     evaluator,
-                     wscenario,
-                     std::bind(initialization::initialization_1, _1,_2,pop_size),
-                     std::bind(selection::selection_1, _1, pop_size),
-                     recombination::crossover,
-                     std::bind(mutation::random_reset, 0.1, _1, _2),
-                     std::bind(replacement::replacement_1,_1,_2, pop_size),
-                     generations
-                     );
-       }
-       else{
-           best = evolutionary_algorithm(
-                     evaluator,
-                     wscenario,
-                     std::bind(initialization::initialization_2, _1,_2,pop_size),
-                     std::bind(selection::selection_1, _1, pop_size),
-                     recombination::crossover,
-                     std::bind(mutation::random_reset, 0.1, _1, _2),
-                     std::bind(replacement::replacement_1,_1,_2, pop_size),
-                     generations
-                     );
-       }
-       
-       
-
-        std::cout << "Best " << best.fitness << std::endl;
+       individual best = evolutionary_algorithm(
+          evaluator,
+          wscenario,
+          std::bind(function == 1 ? initialization::initialization_1 :
+                    initialization::initialization_2, _1,_2,pop_size),
+          std::bind(selection::selection_1, _1, pop_size),
+          recombination::crossover,
+          std::bind(mutation::random_reset, 0.1, _1, _2),
+          std::bind(replacement::replacement_1,_1,_2, pop_size),
+          generations
+          );
+       std::cout << "Best " << best.fitness << std::endl;
    }
 }
