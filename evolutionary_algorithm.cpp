@@ -1,14 +1,12 @@
 
-#include "API/KusiakLayoutEvaluator.h"
-#include "API/WindScenario.h"
-
+#include "API/WindFarmLayoutEvaluator.h"
 #include "evolutionary_algorithm.hpp"
-
 #include "functions.hpp"
 #include "initialization.hpp"
+#include "scenario.hpp"
 
-individual evolutionary_algorithm(KusiakLayoutEvaluator& evaluator,
-                                  WindScenario& wscenario,
+individual evolutionary_algorithm(WindFarmLayoutEvaluator& evaluator,
+                                  Scenario& scenario,
                                   initialization_func initialize,
                                   selection_func select,
                                   recombination_func recombine,
@@ -16,7 +14,7 @@ individual evolutionary_algorithm(KusiakLayoutEvaluator& evaluator,
                                   replacement_func replace,
                                   int generations) {
    // intialization step
-   std::vector<individual> population = initialize(evaluator, wscenario);
+   std::vector<individual> population = initialize(evaluator, scenario);
    for (auto& indiv : population){
      std::cout << indiv.fitness << endl;
    }
@@ -28,16 +26,16 @@ individual evolutionary_algorithm(KusiakLayoutEvaluator& evaluator,
       std::vector<std::vector<individual>::iterator> parents = select(population);
       
       // recombination, mutation step
-      std::vector<individual> children = recombine(parents, evaluator);
+      std::vector<individual> children = recombine(parents, scenario);
       for (auto& child : children) {
-	 mutate(child, evaluator);
+	 mutate(child, scenario);
       }
 
-      initialization::replace_violations(children, wscenario);
+      initialization::replace_violations(children, scenario);
       
       // determine the fitness of the children
       for (auto& child : children) {
-         functions::remove_illegal_coordinates(child, wscenario);
+         functions::remove_illegal_coordinates(child, scenario);
          auto mat_layout = functions::individual_to_matrix<double>(child.layout);
          child.fitness = evaluator.evaluate(&mat_layout);
       }

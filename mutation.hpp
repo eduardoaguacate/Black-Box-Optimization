@@ -6,8 +6,7 @@
 #ifndef BBO_MUTATION_HPP
 #define BBO_MUTATION_HPP
 
-#include "API/KusiakLayoutEvaluator.h"
-
+#include "scenario.hpp"
 #include "structures.hpp"
 
 namespace mutation{
@@ -23,7 +22,7 @@ namespace mutation{
     * individual - the individual to mutate
     * kle - the evaluator
     */
-   void creep(double range, individual& indiv, KusiakLayoutEvaluator& kle);
+   void creep(double range, individual& indiv, Scenario& scenario);
    
    /*
     * mutation::random_reset
@@ -37,7 +36,7 @@ namespace mutation{
     * individual - the individual to mutate
     * kle - the evaluator
     */
-   void random_reset(float chance, individual& indiv, KusiakLayoutEvaluator& kle);
+   void random_reset(float chance, individual& indiv, Scenario& scenario);
 }
 
 #endif

@@ -6,8 +6,7 @@
 #ifndef BBO_RECOMBINATION_HPP
 #define BBO_RECOMBINATION_HPP
 
-#include "API/KusiakLayoutEvaluator.h"
-
+#include "scenario.hpp"
 #include "structures.hpp"
 
 namespace recombination {
@@ -18,7 +17,7 @@ namespace recombination {
     */
    std::vector<individual> none(
       const std::vector<std::vector<individual>::iterator>& parents,
-      KusiakLayoutEvaluator& kle);
+      Scenario& scenario);
    
    /*
     * recombination::crossover
@@ -30,11 +29,11 @@ namespace recombination {
     *
     * parameters:
     * parents - the individuals which were selected for mating
-    * kle - the kusiak layout evaluator
+    * scenario - the wind scenario
     */
    std::vector<individual> crossover(
       const std::vector<std::vector<individual>::iterator>& parents,
-      KusiakLayoutEvaluator& kle);
+      Scenario& scenario);
 }
 
 #endif

@@ -5,12 +5,12 @@
 #include "functions.hpp"
 
 namespace mutation {
-   void creep(double range, individual& indiv, KusiakLayoutEvaluator& kle) {
+   void creep(double range, individual& indiv, Scenario& scenario) {
       // This is the min distance among turbines that must be satisfied
-      double min_distance = 8.0 * kle.scenario.R;
+      double min_distance = 8.0 * scenario.R;
       // the scenario dimensions
-      double width = kle.scenario.width;
-      double height = kle.scenario.height;
+      double width = scenario.width;
+      double height = scenario.height;
 
       // the creep range must be at least the min distance, else we might get stuck
       if (range < 0.0) {
@@ -47,12 +47,12 @@ namespace mutation {
       }
    }
 
-   void random_reset(float chance, individual& indiv, KusiakLayoutEvaluator& kle) {      
+   void random_reset(float chance, individual& indiv, Scenario& scenario) {      
       // This is the min distance among turbines that must be satisfied
-      double min_distance = 8.0 * kle.scenario.R;
+      double min_distance = 8.0 * scenario.R;
       // the scenario dimensions
-      double width = kle.scenario.width;
-      double height = kle.scenario.height;
+      double width = scenario.width;
+      double height = scenario.height;
          
       // prepare the rng
       std::random_device device;

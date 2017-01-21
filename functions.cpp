@@ -4,17 +4,17 @@
 
 namespace functions {
    bool turbine_collides(double x, double y,
-                         KusiakLayoutEvaluator &evaluator,
+                         Scenario &scenario,
                          std::vector<coordinate> &layout){
     
        // We check first whether the coordinate collides with an obstacle
-       if (functions::coordinateCollidesWithObstacles(x, y, evaluator)){
+       if (functions::coordinateCollidesWithObstacles(x, y, scenario)){
            return true;
        }
        // Turbine does not collide with any obstacle, then we are good to go
        else{
            // The minimum distance so that they are in the center
-           double min_distance = 8.0 * evaluator.scenario.R;
+           double min_distance = 8.0 * scenario.R;
            for(auto it = layout.begin(); it < layout.end(); ++it) {
                // If there is already a coordinate with these values, then
                // it does collide
@@ -34,11 +34,10 @@ namespace functions {
        }
    }
     
-    bool coordinateCollidesWithObstacles(double x, double y,
-                                         KusiakLayoutEvaluator &evaluator){
+    bool coordinateCollidesWithObstacles(double x, double y, Scenario& scenario){
         // We check whether this coordinate collide with a given obstacle
-        for (int o = 0; o < evaluator.scenario.obstacles.rows; o++) {
-            Matrix<double> matObstacles = evaluator.scenario.obstacles;
+        for (int o = 0; o < scenario.obstacles.rows; o++) {
+            Matrix<double> matObstacles = scenario.obstacles;
             // If somehow the position of a turbine is within the range
             // of an obstacle, then it collides, and it's an invalid turbine
             double xmin = matObstacles.get(o, 0);
@@ -57,19 +56,19 @@ namespace functions {
     }
 
 
-   void remove_illegal_coordinates(individual& indiv, WindScenario& wscenario) {
+   void remove_illegal_coordinates(individual& indiv, Scenario& scenario) {
       // return if there are no obstacles in the scenario
-      if (wscenario.obstacles.rows == 0)
+      if (scenario.obstacles.rows == 0)
          return;
 
       // iterate through all turbines, and remove the ones which are on obstacles
       for (auto it = indiv.layout.begin(); it != indiv.layout.end();) {
          bool removed = false;
-         for (int o = 0; o < wscenario.obstacles.rows; ++o) {
-            if (it->x >= wscenario.obstacles.get(o, 0) &&
-                it->x <= wscenario.obstacles.get(o, 2) &&
-                it->y >= wscenario.obstacles.get(o, 1) &&
-                it->y <= wscenario.obstacles.get(o, 3)) {
+         for (int o = 0; o < scenario.obstacles.rows; ++o) {
+            if (it->x >= scenario.obstacles.get(o, 0) &&
+                it->x <= scenario.obstacles.get(o, 2) &&
+                it->y >= scenario.obstacles.get(o, 1) &&
+                it->y <= scenario.obstacles.get(o, 3)) {
                removed = true;
                break;
             }

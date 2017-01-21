@@ -25,7 +25,7 @@ public:
     * this is calculated as follows:
     * area = width * height
     * areaObstacles = sum of area of all obstacles
-    * maxTurbines = (area - areaObstacles) / (2*PI*R^2)
+    * maxTurbines = (area - areaObstacles) / (PI*R^2)
     */
    int max_turbines;
    double width;

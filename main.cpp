@@ -46,8 +46,8 @@ int main(int argc, const char * argv[]) {
        WindScenario wscenario(argv[1]);
        KusiakLayoutEvaluator evaluator;
        evaluator.initialize(wscenario);
-       //Scenario scenario(wscenario);
-       //std::cout << wscenario.nturbines << " : " << scenario.max_turbines << std::endl;
+       Scenario scenario(wscenario);
+       std::cout << wscenario.nturbines << " : " << scenario.max_turbines << std::endl;
        int pop_size;
        int generations;
        int function;
@@ -59,7 +59,7 @@ int main(int argc, const char * argv[]) {
        std::cin >> function;
        individual best = evolutionary_algorithm(
           evaluator,
-          wscenario,
+          scenario,
           std::bind(function == 1 ? initialization::initialization_1 :
                     initialization::initialization_2, _1,_2,pop_size),
           std::bind(selection::selection_1, _1, pop_size),

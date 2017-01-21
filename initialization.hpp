@@ -6,10 +6,11 @@
 #ifndef BBO_INITIALIZATION_HPP
 #define BBO_INITIALIZATION_HPP
 
-#include "API/KusiakLayoutEvaluator.h"
+#include "API/WindFarmLayoutEvaluator.h"
 #include "API/Matrix.hpp"
-#include "structures.hpp"
 #include "functions.hpp"
+#include "structures.hpp"
+#include "scenario.hpp"
 
 namespace initialization {
      /* initialization_1
@@ -25,7 +26,9 @@ namespace initialization {
      * return: std::vector<individual> population
      *
      */
-    std::vector<individual> initialization_1(KusiakLayoutEvaluator &evaluator,WindScenario &wscenario,int pop_size);
+    std::vector<individual> initialization_1(WindFarmLayoutEvaluator &evaluator,
+                                             Scenario &scenario,
+                                             int pop_size);
 
     /* initialization_2
     *
@@ -43,8 +46,8 @@ namespace initialization {
     *                          that are produced. In other words
     *                          this represents the population.
     */
-    std::vector<individual> initialization_2(KusiakLayoutEvaluator &evaluator,
-                                             WindScenario &wscenario,
+    std::vector<individual> initialization_2(WindFarmLayoutEvaluator &evaluator,
+                                             Scenario &scenario,
                                              int num_population);
 
     /* replace_violations
@@ -61,7 +64,7 @@ namespace initialization {
      *
      * return: void
      */
-    void replace_violations(std::vector<individual> &population,WindScenario &wscenario);
+    void replace_violations(std::vector<individual> &population, Scenario &scenario);
 
     /* evaluate_population
      *
@@ -75,7 +78,8 @@ namespace initialization {
      * return: void
      *
     */
-    void evaluate_population(KusiakLayoutEvaluator &evaluator,std::vector<individual> &population);
+    void evaluate_population(WindFarmLayoutEvaluator &evaluator,
+                             std::vector<individual> &population);
 
 
     /* create_individual_2
@@ -94,8 +98,8 @@ namespace initialization {
      *     struct individual : this is the individual created
      */
 
-    individual create_individual_2(KusiakLayoutEvaluator &evaluator,
-                                   WindScenario &wscenario);
+    individual create_individual_2(WindFarmLayoutEvaluator &evaluator,
+                                   Scenario &scenario);
 
 }
 

@@ -5,23 +5,18 @@
 #include "recombination.hpp"
 
 namespace recombination {
-   std::vector<individual> none(
-      const std::vector<std::vector<individual>::iterator>& parents,
-      KusiakLayoutEvaluator& kle) {
-      
+   std::vector<individual> none(const std::vector<std::vector<individual>::iterator>& parents,
+                                Scenario& scenario) {      
       std::vector<individual> children;
       // just copy all the parents
-      for (auto& parent : parents)
-      {
+      for (auto& parent : parents) {
          children.push_back(*parent);
       }
       return children;
    }
    
-   std::vector<individual> crossover(
-      const std::vector<std::vector<individual>::iterator>& parents,
-      KusiakLayoutEvaluator& kle) {
-      
+   std::vector<individual> crossover(const std::vector<std::vector<individual>::iterator>& parents,
+                                     Scenario& scenario) {      
       // the return value
       std::vector<individual> children;
 
@@ -49,11 +44,11 @@ namespace recombination {
          std::size_t cutoff = dist_min(rng);
          // if the size is below the maximum, add some additional turbines
          // this prevents that we will eventually converge to low turbine individuals
-         std::uniform_int_distribution<std::size_t> dist_over(min_size, kle.scenario.nturbines);
+         std::uniform_int_distribution<std::size_t> dist_over(min_size, scenario.max_turbines);
          std::size_t over = dist_over(rng);
          std::size_t size = max_size < over ? max_size : over;
-         std::uniform_real_distribution<double> wdist(0.0, kle.scenario.width);
-         std::uniform_real_distribution<double> hdist(0.0, kle.scenario.height); 
+         std::uniform_real_distribution<double> wdist(0.0, scenario.width);
+         std::uniform_real_distribution<double> hdist(0.0, scenario.height); 
 
          individual child;
          // copy [0, cutoff] turbines from min_layout

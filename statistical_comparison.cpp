@@ -77,6 +77,7 @@ void statistical_comparison(int pop_size, int generations, int iterations) {
                      WindScenario wscenario(PATH + "0" + std::to_string(sc_id) + EXT);
                      KusiakLayoutEvaluator evaluator;
                      evaluator.initialize(wscenario);
+                     Scenario scenario(wscenario);
 
                      // hold the fitness results in a vector
                      std::vector<double> fitnesses;
@@ -84,7 +85,7 @@ void statistical_comparison(int pop_size, int generations, int iterations) {
                      // this combination of functions and scenario
                      for (int j = 0; j < iterations; ++j) {
                         double fitness = evolutionary_algorithm(
-                           evaluator, wscenario, init.second, select.second,
+                           evaluator, scenario, init.second, select.second,
                            recombine.second, mutate.second, replace.second,
                            generations).fitness;
                         fitnesses.push_back(fitness);

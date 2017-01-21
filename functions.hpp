@@ -8,7 +8,7 @@
 
 #include "API/Matrix.hpp"
 #include "structures.hpp"
-#include "API/KusiakLayoutEvaluator.h"
+#include "scenario.hpp"
 
 namespace functions {
     /* turbine_collides
@@ -24,7 +24,7 @@ namespace functions {
      * returns:
      *      bool : true if it collides, false otherwise
      */
-    bool turbine_collides(double x, double y, KusiakLayoutEvaluator &evaluator,
+    bool turbine_collides(double x, double y, Scenario &scenario,
                           std::vector<coordinate> &layout);
     
     /* coordinateCollidesWithObstacles
@@ -40,7 +40,7 @@ namespace functions {
      *      bool : true if it collides, false otherwise
      */
     bool coordinateCollidesWithObstacles(double x, double y,
-                                         KusiakLayoutEvaluator &evaluator);
+                                         Scenario &scenario);
 
     /*
      * remove_illegal_coordinates
@@ -52,7 +52,7 @@ namespace functions {
      * 
      * params: individual and wind scenario
      */
-    void remove_illegal_coordinates(individual& indiv, WindScenario& wscenario);
+    void remove_illegal_coordinates(individual& indiv, Scenario& scenario);
 
     /* vector_to_matrix
      *

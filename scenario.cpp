@@ -26,6 +26,6 @@ int Scenario::calculate_max_turbines() {
       double obs_height = obstacles.get(o, 3) - obstacles.get(o, 1);
       base_area -= obs_width * obs_height;
    }
-   double turb_area = std::pow(R * 8.0001, 2) * M_PI;
+   double turb_area = std::pow(R * 8.0001, 2) * M_PI / 2;
    return base_area / turb_area;
 }

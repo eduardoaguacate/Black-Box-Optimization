@@ -23,30 +23,37 @@ namespace initialization {
      * return: std::vector<individual> population
      *
      */
-    std::vector<individual> initialization_1(KusiakLayoutEvaluator &evaluator,WindScenario &wscenario,int pop_size) {
+    std::vector<individual> initialization_1(WindFarmLayoutEvaluator &evaluator,
+                                             Scenario &scenario,
+                                             int pop_size) {
 
         std::vector<individual> population;
         individual indiv;
         coordinate coord;
 
-
         for (int j = 0; j < pop_size;j++){
             //initiate layout (coordinates)
-            for (int i = 0;i < wscenario.nturbines; i++) {
+            for (int i = 0;i < scenario.max_turbines; i++) {
                 //creates coordinates and puts them into the individual
-                coord.x = wscenario.width * (double) rand() / (double) RAND_MAX;
-                coord.y = wscenario.height * (double) rand() / (double) RAND_MAX;
+                coord.x = scenario.width * (double) rand() / (double) RAND_MAX;
+                coord.y = scenario.height * (double) rand() / (double) RAND_MAX;
                 indiv.layout.push_back(coord);
             }
 
             population.push_back(indiv);
             indiv.layout.clear();
         }
-        initialization::replace_violations(population,wscenario);
+        initialization::replace_violations(population,scenario);
         initialization::evaluate_population(evaluator,population);
         return population;
 
     }
+
+   double turbine_distance(const coordinate& a, const coordinate& b) {
+      double dx = std::abs(a.x - b.x);
+      double dy = std::abs(a.y - b.y);
+      return std::sqrt(dx * dx + dy * dy);
+   }
 
     /* replace_violations
      *
@@ -60,15 +67,15 @@ namespace initialization {
      *
      * return: void
      */
-    void replace_violations(std::vector<individual> &population,WindScenario &wscenario) {
-        double radius = wscenario.R * 8.001; //distance must be radius*8
+   void replace_violations(std::vector<individual> &population, Scenario &scenario) {
+        double radius = scenario.R * 8.0001; //distance must be radius*8
         //population.at(i).layout.at(j).x
         //thirst loop to pick an individual, second to pick a coordinate to be checked
         //third loop to compare the chosen coordinate with all other coordinates
         //within the individuals layout
-        for (int i = 0;i < population.size(); i++) {
-            for (int j = 0; j < population.at(i).layout.size();j++){
-                for (int coord = 0;coord < population.at(i).layout.size();) {
+        for (int i = 0; i < population.size(); i++) {
+            for (int j = 0; j < population.at(i).layout.size(); j++){
+                for (int coord = 0; coord < population.at(i).layout.size();) {
                     //preventing the comparison to the coordinate itself
                     if (j == coord) {
                         coord++;
@@ -81,24 +88,10 @@ namespace initialization {
                     // Each "successfull" if branch proves that no violation exists
                     // for this pair, and thereby continues to the next coordinate /
                     // iteration
-                    if (population.at(i).layout.at(j).x < population.at(i).layout.at(coord).x - radius) {
-                        coord++;
-                        continue;
-                    }
-
-                    if (population.at(i).layout.at(j).x > population.at(i).layout.at(coord).x + radius) {
-                        coord++;
-                        continue;
-                    }
-
-                    if (population.at(i).layout.at(j).y < population.at(i).layout.at(coord).y - radius) {
-                        coord++;
-                        continue;
-                    }
-
-                    if (population.at(i).layout.at(j).y > population.at(i).layout.at(coord).y + radius) {
-                        coord++;
-                        continue;
+                    if (turbine_distance(population[i].layout[j],
+                                         population[i].layout[coord]) > radius) {
+                       coord++;
+                       continue;
                     }
 
                     // violation occured:
@@ -106,16 +99,17 @@ namespace initialization {
                     // the violating coordinate will be randomly replaced, and all
                     // other coordinates within the individual will be checked against
                     // the new one (coord = 0)
-
-                    population.at(i).layout.at(j).x = wscenario.width * (double) rand() / (double) RAND_MAX;
-                    population.at(i).layout.at(j).y = wscenario.height * (double) rand() / (double) RAND_MAX;
+                    population[i].layout[j].x = scenario.width * (double) rand()
+                       / (double) RAND_MAX;
+                    population[i].layout[j].y = scenario.height * (double) rand()
+                       / (double) RAND_MAX;
                     coord = 0;
                 }
 
             }
         }
-
     }
+   
     /* evaluate_population
      *
      * This functions takes the population and the evaluator
@@ -128,27 +122,22 @@ namespace initialization {
      * return: void
      *
     */
-    void evaluate_population(KusiakLayoutEvaluator &evaluator,std::vector<individual> &population) {
-        
-
+    void evaluate_population(WindFarmLayoutEvaluator &evaluator,
+                             std::vector<individual> &population) {
         //cast to Matrix
         Matrix<double> test_matrix(population.at(0).layout.size(),2);
         
-        for(int j = 0;j < population.size();j++) {
-
-        
-            for(int i = 0;i < population.at(j).layout.size();i++) {
+        for(int j = 0; j < population.size(); j++) {       
+            for(int i = 0; i < population.at(j).layout.size(); i++) {
                 test_matrix.set(i,0,population.at(j).layout.at(i).x);
                 test_matrix.set(i,1,population.at(j).layout.at(i).y);
             }
-            population.at(j).fitness = evaluator.evaluate(&test_matrix);
-        
-        }
-        
-        
+            population.at(j).fitness = evaluator.evaluate(&test_matrix);        
+        }                
     }
-    individual create_individual_2(KusiakLayoutEvaluator &evaluator,
-                                   WindScenario &wscenario){
+   
+    individual create_individual_2(WindFarmLayoutEvaluator &evaluator,
+                                   Scenario &scenario){
         // The class Random is used for wrapping a random number generator and a
         // uniform real distribution
         Random rand;
@@ -156,19 +145,19 @@ namespace initialization {
         // There is a security constraint between turbines, they can't be
         // less than 8R near, which means that they have to be more than
         // 8R far away from each other
-        double min_distance = 8.0 * wscenario.R;
+        double min_distance = 8.0 * scenario.R;
         double factor = min_distance * 1.000001;
         // These are the farm's constraints
-        double width = wscenario.width / factor;
-        double height = wscenario.height / factor;
+        double width = scenario.width / factor;
+        double height = scenario.height / factor;
         std::vector<coordinate> layout;
         
         int count = 0;
-        int max_n_turbines = 0;
+        int max_n_turbines = scenario.max_turbines;
         
         // We check how many turbines we can stack up in this scenario, and check how
         // it compares with the number of turbines given in it
-        for (int x = 0; x < width; x++) {
+        /*for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
                 double xpos = x * factor;
                 double ypos = y * factor;
@@ -182,12 +171,11 @@ namespace initialization {
         }
         // If the max n turbines is more than the scenario's ones,
         // we take the latter one
-        max_n_turbines = max_n_turbines <= wscenario.nturbines ? max_n_turbines : wscenario.nturbines;
+        max_n_turbines = max_n_turbines <= wscenario.nturbines ? max_n_turbines : wscenario.nturbines;*/
         
         int n_turbines = rand.DrawNumber<int>(3.0 / 4.0 * max_n_turbines,
                                               max_n_turbines);
-        
-        
+                
         // We create all the turbines
         individual indiv;
         while (count < n_turbines) {
@@ -195,7 +183,7 @@ namespace initialization {
             double y = rand.DrawNumber<double>(0, height) * factor;
             // Checks if the coordinate generated collides with any other
             // turbine
-            if(!functions::turbine_collides(x, y, evaluator, indiv.layout)) {
+            if(!functions::turbine_collides(x, y, scenario, indiv.layout)) {
                 struct coordinate coord = {
                     x, //x coordinate
                     y, //y coordinate
@@ -211,20 +199,18 @@ namespace initialization {
         return indiv;
     }
 
-    std::vector<individual> initialization_2(KusiakLayoutEvaluator &evaluator,
-                                             WindScenario &wscenario,
+    std::vector<individual> initialization_2(WindFarmLayoutEvaluator &evaluator,
+                                             Scenario &scenario,
                                              int num_population){
-
             std::vector<individual> population;
         
             // We start populating
             for(int i = 0; i < num_population; ++i) {
                 struct individual indiv =
-                        initialization::create_individual_2(evaluator,wscenario);
+                        initialization::create_individual_2(evaluator, scenario);
                 population.push_back(indiv);
             }
 
             return population;
     }
-
 }
