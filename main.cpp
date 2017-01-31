@@ -41,7 +41,7 @@ int main(int argc, const char * argv[]) {
        std::cin >> iterations;
        std::cout << "Comparison is being run. This will take a while..." << std::endl;
        
-       statistical_comparison(pop_size, generations, iterations);
+       statistical_comparison(pop_size, generations, iterations, argv[2]);
    } else {
        WindScenario wscenario(argv[1]);
        KusiakLayoutEvaluator evaluator;

@@ -14,6 +14,7 @@
  * generations - generations
  * iterations - the number of times each scenario is tried
  */
-void statistical_comparison(int pop_size, int generations, int iterations);
+void statistical_comparison(int pop_size, int generations, int iterations,
+                            const char* sc_name);
 
 #endif
