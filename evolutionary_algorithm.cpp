@@ -15,6 +15,7 @@ individual evolutionary_algorithm(WindFarmLayoutEvaluator& evaluator,
                                   int generations) {
    // intialization step
    std::vector<individual> population = initialize(evaluator, scenario);
+   std::cout << "Initial population:" << std::endl;
    for (auto& indiv : population){
      std::cout << indiv.fitness << endl;
    }

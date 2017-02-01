@@ -22,7 +22,7 @@ void statistical_comparison(int pop_size, int generations, int iterations,
    // create collections of all functions of each type
    std::unordered_map<std::string, initialization_func> inits = {
       { "init_2", std::bind(initialization::initialization_2, _1, _2, pop_size) },
-      { "init_1", std::bind(initialization::initialization_1, _1, _2, pop_size) }
+      //{ "init_1", std::bind(initialization::initialization_1, _1, _2, pop_size) }
    };
    std::unordered_map<std::string, selection_func> selects = {
       { "tournament", std::bind(selection::selection_1, _1, pop_size) }
@@ -63,10 +63,10 @@ void statistical_comparison(int pop_size, int generations, int iterations,
                      .append(mutate.first).append(" ")
                      .append(replace.first);
 
-                  // create a scenario and an evaluator
+                  std::cout << "Testing: " << name << std::endl;
+
+                  // create a scenario
                   WindScenario wscenario(sc_name);
-                  KusiakLayoutEvaluator evaluator;
-                  evaluator.initialize(wscenario);
                   Scenario scenario(wscenario);
 
                   // run the algorithm on the scenario
@@ -75,11 +75,16 @@ void statistical_comparison(int pop_size, int generations, int iterations,
                   // determine the average fitness for
                   // this combination of functions and scenario
                   for (int j = 0; j < iterations; ++j) {
+                     // create an evaluator for this run
+                     KusiakLayoutEvaluator evaluator;
+                     evaluator.initialize(wscenario);
                      double fitness = evolutionary_algorithm(
                         evaluator, scenario, init.second, select.second,
                         recombine.second, mutate.second, replace.second,
                         generations).fitness;
                      fitnesses.push_back(fitness);
+
+                     std::cout << "Iteration " << j << ": " << fitness << std::endl;
                   }
                   
                   result r{ 0.0, 0.0, name };   

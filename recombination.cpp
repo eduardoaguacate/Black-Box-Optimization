@@ -1,4 +1,4 @@
-
+#include <algorithm>
 #include <random>
 
 #include "functions.hpp"
@@ -29,6 +29,13 @@ namespace recombination {
          auto& layout_a = (*(it))->layout;
          auto& layout_b = it + 1 == parents.end() ?
 	    (*(parents.begin()))->layout : (*(it + 1))->layout;
+
+         // sort the layouts so that the crossover is geometric
+         auto coord_compare = [](const coordinate& a, const coordinate& b) {
+            return a.y == b.y ? a.x < b.x : a.y < b.y;
+         };
+         std::sort(layout_a.begin(), layout_a.end(), coord_compare);
+         std::sort(layout_b.begin(), layout_b.end(), coord_compare);
 
          // determine which layout has less turbines. the cutoff will be drawn from this
          bool a_min = layout_a.size() < layout_b.size();
