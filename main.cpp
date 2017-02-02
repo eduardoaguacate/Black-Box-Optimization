@@ -57,7 +57,7 @@ int main(int argc, const char * argv[]) {
        std::cin >> generations;
        std::cout << "Enter which initialization function you'll want to use (1/2): " << std::endl;
        std::cin >> function;
-       individual best = evolutionary_algorithm(
+       double fitness = evolutionary_algorithm(
           evaluator,
           scenario,
           std::bind(function == 1 ? initialization::initialization_1 :
@@ -67,7 +67,7 @@ int main(int argc, const char * argv[]) {
           std::bind(mutation::random_reset, 0.1, _1, _2),
           std::bind(replacement::replacement_1,_1,_2, pop_size),
           generations
-          );
-       std::cout << "Best " << best.fitness << std::endl;
+          ).first;
+       std::cout << "Best " << fitness << std::endl;
    }
 }

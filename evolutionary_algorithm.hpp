@@ -43,7 +43,8 @@ using replacement_func = std::function<std::vector<individual>(
  * replace - function which updates the population
  * generations - the number of generations until the result is obtained
  */
-individual evolutionary_algorithm(WindFarmLayoutEvaluator& evaluator,
+std::pair<double, double> evolutionary_algorithm(
+                                  WindFarmLayoutEvaluator& evaluator,
                                   Scenario& scenario,
                                   initialization_func initialize,
                                   selection_func select,

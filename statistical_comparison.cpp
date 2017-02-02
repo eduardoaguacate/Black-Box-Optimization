@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <cmath>
 #include <iostream>
 #include <limits>
@@ -21,8 +22,7 @@ void statistical_comparison(int pop_size, int generations, int iterations,
    using namespace std::placeholders;
    // create collections of all functions of each type
    std::unordered_map<std::string, initialization_func> inits = {
-      { "init_2", std::bind(initialization::initialization_2, _1, _2, pop_size) },
-      //{ "init_1", std::bind(initialization::initialization_1, _1, _2, pop_size) }
+      { "init_2", std::bind(initialization::initialization_2, _1, _2, pop_size) }
    };
    std::unordered_map<std::string, selection_func> selects = {
       { "tournament", std::bind(selection::selection_1, _1, pop_size) }
@@ -40,14 +40,8 @@ void statistical_comparison(int pop_size, int generations, int iterations,
       { "age-based", replacement::age_based }
    };
 
-   // a struct to hold the result
-   struct result {
-      double average;
-      double variance;
-      std::string name;
-   };
-   result best_avg{ std::numeric_limits<double>::max(), 0.0, "" };
-   result best_var{ 0.0, std::numeric_limits<double>::max(), "" };
+   std::vector<std::pair<std::string, double>> averages;
+   std::vector<std::pair<std::string, double>> variances;
    
    // iterate over all, and determine best average and lowest variance
    for (auto& init : inits) {
@@ -81,47 +75,53 @@ void statistical_comparison(int pop_size, int generations, int iterations,
                      double fitness = evolutionary_algorithm(
                         evaluator, scenario, init.second, select.second,
                         recombine.second, mutate.second, replace.second,
-                        generations).fitness;
+                        generations).second;
                      fitnesses.push_back(fitness);
 
                      std::cout << "Iteration " << j << ": " << fitness << std::endl;
                   }
-                  
-                  result r{ 0.0, 0.0, name };   
+                   
                   // compute the average
+                  double average = 0.0;
                   for (auto& fitness : fitnesses) {
-                     r.average += fitness;
+                     average += fitness;
                   }
-                  r.average /= iterations;
+                  average /= iterations;
                   // compute the variance
+                  double variance = 0.0;
                   for (auto& fitness : fitnesses) {
-                     double delta = std::abs(r.average - fitness);
-                     r.variance += delta * delta;
+                     double delta = std::abs(average - fitness);
+                     variance += delta * delta;
                   }
                   if (iterations > 1) {
-                     r.variance /= iterations - 1;
+                     variance /= iterations - 1;
                   }
-                     
-                  // update the best results
-                  if (best_avg.average > r.average) {
-                     best_avg = r;
-                  }
-                  if (best_var.variance > r.variance) {
-                     best_var = r;
-                  }
+                  averages.push_back({ name, average });
+                  variances.push_back({ name, variance });
                }
             }
          }
       }
    }
-                                
+   std::sort(averages.begin(), averages.end(), 
+       [](const std::pair<std::string, double>& a, 
+          const std::pair<std::string, double>& b){
+              return a.second > b.second;
+          });
+   std::sort(variances.begin(), variances.end(), 
+       [](const std::pair<std::string, double>& a, 
+          const std::pair<std::string, double>& b){
+              return a.second < b.second;
+          });
+                   
    std::cout << "=== Results ===\n";
-   std::cout << "Best average: " << std::endl
-             << "Name: " << best_avg.name << std::endl
-             << "Average: " << best_avg.average << std::endl
-             << "Variance: " << best_avg.variance << std::endl;
-   std::cout << "Best (lowest) variance: " << std::endl
-             << "Name: " << best_var.name << std::endl
-             << "Average: " << best_var.average << std::endl
-             << "Variance: " << best_var.variance << std::endl << std::endl;
+   std::cout << "= Averages =\n";
+   for (auto& avg : averages) {
+       std::cout << avg.first << ": " << avg.second << '\n';
+   }
+   std::cout << "= Variances =\n";
+   for (auto& var : variances) {
+       std::cout << var.first << ": " << var.second << '\n';
+   }
+   std::cout << std::flush;
 }

@@ -5,7 +5,8 @@
 #include "initialization.hpp"
 #include "scenario.hpp"
 
-individual evolutionary_algorithm(WindFarmLayoutEvaluator& evaluator,
+std::pair<double, double> evolutionary_algorithm(
+                                  WindFarmLayoutEvaluator& evaluator,
                                   Scenario& scenario,
                                   initialization_func initialize,
                                   selection_func select,
@@ -17,11 +18,24 @@ individual evolutionary_algorithm(WindFarmLayoutEvaluator& evaluator,
    std::vector<individual> population = initialize(evaluator, scenario);
    std::cout << "Initial population:" << std::endl;
    for (auto& indiv : population){
-     std::cout << indiv.fitness << endl;
+     std::cout << indiv.fitness << std::endl;
    }
-   // this will store the maximum fittest member
-   individual fittest = *population.begin();
-
+   
+   // the best (lowest) fittness
+   double fittest = population.begin()->fitness;
+   // the average fitness of the initial population
+   double avg_fitness = 0.0;
+   for (auto& indiv : population) {
+      avg_fitness += indiv.fitness;
+      if (fittest > indiv.fitness) {
+         fittest = indiv.fitness;
+      }
+   }
+   avg_fitness /= population.size();
+   
+   std::cout << "Initial fittest: " << fittest << std::endl;
+   std::cout << "Initial average: " << avg_fitness << std::endl;
+   
    for (int g = 0; g < generations; ++g) {
       // selection step
       std::vector<std::vector<individual>::iterator> parents = select(population);
@@ -29,7 +43,7 @@ individual evolutionary_algorithm(WindFarmLayoutEvaluator& evaluator,
       // recombination, mutation step
       std::vector<individual> children = recombine(parents, scenario);
       for (auto& child : children) {
-	 mutate(child, scenario);
+	     mutate(child, scenario);
       }
 
       initialization::replace_violations(children, scenario);
@@ -46,12 +60,12 @@ individual evolutionary_algorithm(WindFarmLayoutEvaluator& evaluator,
       
       // update the fittest member
       for (auto iter = population.begin(); iter != population.end(); ++iter) {
-         if (iter->fitness < fittest.fitness) {
-            fittest = *iter;
+         if (fittest > iter->fitness) {
+            fittest = iter->fitness;
          }
       }
-      std::cout << "Fittest at generation " << g + 1 << " : " << fittest.fitness << endl;
+      std::cout << "Fittest at generation " << g + 1 << " : " << fittest << endl;
    }
 
-   return fittest;
+   return{ fittest, avg_fitness - fittest };
 }
