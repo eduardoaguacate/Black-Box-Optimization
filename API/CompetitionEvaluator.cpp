@@ -42,7 +42,7 @@ void CompetitionEvaluator::initialize(CompetitionScenario& sc, const char* token
 
     post_data = "{\"api_token\":\"" + user_token + "\"}";
 
-    curl_easy_setopt(curl, CURLOPT_URL, "http://windflo.com/runs/");
+    curl_easy_setopt(curl, CURLOPT_URL, "http://windflo.mueller-bady.com:8081/runs/");
     curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
     curl_easy_setopt(curl, CURLOPT_POSTFIELDS, post_data.c_str());
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
@@ -62,7 +62,7 @@ void CompetitionEvaluator::initialize(CompetitionScenario& sc, const char* token
   Json::Reader reader;
   bool parsingSuccessful = reader.parse( readBuffer, root, false );
   if ( !parsingSuccessful ) {
-    fprintf(stderr, "json parse failed: %s\n", reader.getFormattedErrorMessages().c_str());
+    fprintf(stderr, "json parse failed1: %s\n", reader.getFormattedErrorMessages().c_str());
   }
 
   run_token = root["token"].asString();
@@ -113,7 +113,7 @@ double CompetitionEvaluator::evaluate(Matrix<double>* layout) {
     }
     post_data = post_data + "]}";
 
-    curl_easy_setopt(curl, CURLOPT_URL, "http://windflo.com/evaluate/");
+    curl_easy_setopt(curl, CURLOPT_URL, "http://windflo.mueller-bady.com:8081/evaluate/");
     curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
     curl_easy_setopt(curl, CURLOPT_POSTFIELDS, post_data.c_str());
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
@@ -133,7 +133,7 @@ double CompetitionEvaluator::evaluate(Matrix<double>* layout) {
   Json::Reader reader;
   bool parsingSuccessful = reader.parse( readBuffer, root, false );
   if ( !parsingSuccessful ) {
-    fprintf(stderr, "json parse failed: %s\n", reader.getFormattedErrorMessages().c_str());
+    fprintf(stderr, "json parse failed2: %s\n", reader.getFormattedErrorMessages().c_str());
   }
 
   tspe=new Matrix<double>(24, tpositions->rows);

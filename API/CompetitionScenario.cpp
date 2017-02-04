@@ -19,7 +19,7 @@ static size_t WriteCallback(void *contents, size_t size, size_t nmemb, void *use
 CompetitionScenario::CompetitionScenario(int sc) {
     num = sc;
     char urlbuff[100];
-    sprintf(urlbuff, "http://windflo.com/scenarios/%d", sc);
+    sprintf(urlbuff, "http://windflo.mueller-bady.com:8081/scenarios/%d", sc);
 
     CURL *curl;
     CURLcode res;
@@ -43,7 +43,7 @@ CompetitionScenario::CompetitionScenario(int sc) {
     Json::Reader reader;
     bool parsingSuccessful = reader.parse( readBuffer, root, false );
     if ( !parsingSuccessful ) {
-      fprintf(stderr, "json parse failed: %s\n", reader.getFormattedErrorMessages().c_str());
+      fprintf(stderr, "json parse failed3: %s\n", reader.getFormattedErrorMessages().c_str());
     }
 
     width = root["width"].asDouble();

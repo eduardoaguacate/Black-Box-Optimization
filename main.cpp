@@ -9,8 +9,10 @@
 #include <string>
 
 //API libraries
+#include "API/CompetitionScenario.h"
 #include "API/WindScenario.h"
 #include "API/KusiakLayoutEvaluator.h"
+#include "API/CompetitionEvaluator.h"
 
 //Project's libraries
 #include "structures.hpp"
@@ -44,11 +46,29 @@ int main(int argc, const char * argv[]) {
        
        statistical_comparison(pop_size, generations, iterations, argv[2]);
    } else {
-       WindScenario wscenario(argv[1]);
-       KusiakLayoutEvaluator evaluator;
-       evaluator.initialize(wscenario);
-       Scenario scenario(wscenario);
-       std::cout << wscenario.nturbines << " : " << scenario.max_turbines << std::endl;
+       bool serious_mode = false;
+       std::cout << "Run against the server? (0/1)" << std::endl;
+       std::cin >> serious_mode;
+       
+       WindFarmLayoutEvaluator* evaluator;
+       Scenario* scenario;
+       if (serious_mode) {
+          int sc_number;
+          std::cout << "Scenario number? (1 to 5)" << std::endl;
+          std::cin >> sc_number;
+          CompetitionScenario cscenario(sc_number);
+          scenario = new Scenario(cscenario);
+          CompetitionEvaluator* cevaluator = new CompetitionEvaluator();
+          cevaluator->initialize(cscenario, "XQNC1VSQ112N3I45DP56D87RYODN7Z");
+          evaluator = cevaluator;
+       } else {
+          WindScenario wscenario(argv[1]);
+          scenario = new Scenario(wscenario);
+          KusiakLayoutEvaluator* kevaluator = new KusiakLayoutEvaluator();
+          kevaluator->initialize(wscenario);
+          evaluator = kevaluator;
+       }
+       
        int pop_size = 0;
        int generations = 0;
        bool shouldLoadFile = false;
@@ -73,8 +93,8 @@ int main(int argc, const char * argv[]) {
        std::cout << "Enter the number of generations: " << std::endl;
        std::cin >> generations;
        double fitness = evolutionary_algorithm(
-          evaluator,
-          scenario,
+          *evaluator,
+          *scenario,
           std::bind(initialization::initialization_2, _1,_2,pop_size),
           std::bind(selection::selection_1, _1, pop_size),
           recombination::crossover,
@@ -85,5 +105,6 @@ int main(int argc, const char * argv[]) {
           shouldSaveFile
           ).first;
        std::cout << "Best " << fitness << std::endl;
+       delete scenario;
    }
 }
