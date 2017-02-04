@@ -75,7 +75,7 @@ void statistical_comparison(int pop_size, int generations, int iterations,
                      double fitness = evolutionary_algorithm(
                         evaluator, scenario, init.second, select.second,
                         recombine.second, mutate.second, replace.second,
-                        generations).second;
+                        generations, false,false).second;
                      fitnesses.push_back(fitness);
 
                      std::cout << "Iteration " << j << ": " << fitness << std::endl;

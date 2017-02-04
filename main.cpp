@@ -24,6 +24,7 @@
 #include "scenario.hpp"
 #include <time.h>
 #include <stdlib.h>
+#include <fstream>
 
 using namespace std::placeholders;
 int main(int argc, const char * argv[]) {
@@ -48,25 +49,40 @@ int main(int argc, const char * argv[]) {
        evaluator.initialize(wscenario);
        Scenario scenario(wscenario);
        std::cout << wscenario.nturbines << " : " << scenario.max_turbines << std::endl;
-       int pop_size;
-       int generations;
-       int function;
-       std::cout << "Enter the population size: " << std::endl;
-       std::cin >> pop_size;
+       int pop_size = 0;
+       int generations = 0;
+       bool shouldLoadFile = false;
+       bool shouldSaveFile = false;
+       
+       std::cout << "Should it load from disk? (0/1)" << std::endl;
+       std::cin >> shouldLoadFile;
+       std::cout << "Should it save data to disk? (0/1)" << std::endl;
+       std::cin >> shouldSaveFile;
+       std::ifstream file("population.txt", std::ifstream::in);
+       if (file.is_open()){
+           file >> pop_size;
+           file.close();
+       }
+       else{
+           shouldLoadFile = false;
+       }
+       if (!shouldLoadFile){
+           std::cout << "Enter the population size: " << std::endl;
+           std::cin >> pop_size;
+       }
        std::cout << "Enter the number of generations: " << std::endl;
        std::cin >> generations;
-       std::cout << "Enter which initialization function you'll want to use (1/2): " << std::endl;
-       std::cin >> function;
        double fitness = evolutionary_algorithm(
           evaluator,
           scenario,
-          std::bind(function == 1 ? initialization::initialization_1 :
-                    initialization::initialization_2, _1,_2,pop_size),
+          std::bind(initialization::initialization_2, _1,_2,pop_size),
           std::bind(selection::selection_1, _1, pop_size),
           recombination::crossover,
           std::bind(mutation::random_reset, 0.1, _1, _2),
           std::bind(replacement::replacement_1,_1,_2, pop_size),
-          generations
+          generations,
+          shouldLoadFile,
+          shouldSaveFile
           ).first;
        std::cout << "Best " << fitness << std::endl;
    }

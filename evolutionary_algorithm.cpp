@@ -13,9 +13,12 @@ std::pair<double, double> evolutionary_algorithm(
                                   recombination_func recombine,
                                   mutation_func mutate,
                                   replacement_func replace,
-                                  int generations) {
+                                  int generations,
+                                  bool shouldLoadFile,
+                                  bool shouldSaveFile) {
    // intialization step
-   std::vector<individual> population = initialize(evaluator, scenario);
+   string file_name = "population.txt";
+   std::vector<individual> population = shouldLoadFile ? functions::load_population_from_file(file_name) : initialize(evaluator, scenario);
    std::cout << "Initial population:" << std::endl;
    for (auto& indiv : population){
      std::cout << indiv.fitness << std::endl;
@@ -57,7 +60,6 @@ std::pair<double, double> evolutionary_algorithm(
 
       // replacement step
       population = replace(population, children);
-      
       // update the fittest member
       for (auto iter = population.begin(); iter != population.end(); ++iter) {
          if (fittest > iter->fitness) {
@@ -66,6 +68,9 @@ std::pair<double, double> evolutionary_algorithm(
       }
       std::cout << "Fittest at generation " << g + 1 << " : " << fittest << endl;
    }
+    if (shouldSaveFile){
+        functions::save_population_to_file(file_name, population);
+    }
 
    return{ fittest, avg_fitness - fittest };
 }

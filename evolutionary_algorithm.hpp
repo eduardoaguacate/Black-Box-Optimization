@@ -42,6 +42,9 @@ using replacement_func = std::function<std::vector<individual>(
  * mutate - function which mutates children
  * replace - function which updates the population
  * generations - the number of generations until the result is obtained
+ * shouldLoadFile - this makes the algorithm load the data from a previous file
+ * shouldSaveFile - this makes the algorithm save the data from the population at the end
+ *
  */
 std::pair<double, double> evolutionary_algorithm(
                                   WindFarmLayoutEvaluator& evaluator,
@@ -51,6 +54,8 @@ std::pair<double, double> evolutionary_algorithm(
                                   recombination_func recombine,
                                   mutation_func mutate,
                                   replacement_func replace,
-                                  int generations);
+                                  int generations,
+                                  bool shouldLoadFile,
+                                  bool shouldSaveFile);
 
 #endif

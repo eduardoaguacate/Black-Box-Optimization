@@ -79,6 +79,34 @@ namespace functions {
      *            false otherwise
      */
     bool compare_fitness(const individual &indiv,const individual &indiv2);
+    
+    /* load_population_from_file
+     *
+     * This function loads a population that was previously saved in a file
+     *
+     * params:
+     *     const string file_name : where the data is stored
+     *
+     * returns:
+     *     std::vector<individual> : the population that is stored in the file
+     */
+    std::vector<individual> load_population_from_file(const string file_name);
+    
+    /* save_population_to_file
+     *
+     * This function saves a given population in a given file
+     *
+     * params:
+     *     const string file_name : where the data is going to be stored
+     *
+     * returns:
+     *     void
+     */
+     void save_population_to_file(const string file_name,
+                                                    vector<individual> &pop);
+
+    
+    
 }
 
 template<typename T>

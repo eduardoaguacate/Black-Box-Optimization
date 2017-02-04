@@ -1,5 +1,6 @@
 #include <random>
 #include <vector>
+#include <fstream>
 #include "functions.hpp"
 
 namespace functions {
@@ -80,6 +81,69 @@ namespace functions {
          }
       }
    }
+    std::vector<individual> load_population_from_file(const string file_name){
+        std::ifstream file(file_name, std::ifstream::in);
+        if (file.is_open()){
+            int pop_size;
+            file >> pop_size;
+            std::vector<individual> pop;
+            for (int i = 0; i < pop_size; ++i){
+                individual indiv;
+                double fitness;
+                int layout_size;
+                file >> fitness;
+                file >> layout_size;
+                indiv.fitness = fitness;
+                for (int j = 0; j < layout_size; ++j){
+                    coordinate coord;
+                    file >> coord.x >> coord.y;
+                    indiv.layout.push_back(coord);
+                }
+                pop.push_back(indiv);
+            }
+            file.close();
+            return pop;
+
+        }
+        else{
+            std::cout << "ERROR: shouldLoadFile option is TRUE but the file was not found" << std::endl;
+            return std::vector<individual>();
+        }
+
+    }
+    
+    void save_population_to_file(const string file_name,
+                                 std::vector<individual> &pop){
+        // We make the file
+        std::ofstream file(file_name);
+        
+        /*
+         * FILE STRUCTURE
+         1. pop_size
+         (loop)2..pop_size
+                lineX. individual fitness
+                lineY. individual's layout size
+                (loop)lineY..individual's layout size
+                    lineZ. x      y
+         
+         */
+        
+        file << pop.size() << "\r\n";
+        // We loop through all the individuals in the population
+        for (auto it = pop.begin(); it < pop.end(); ++it){
+            individual indiv = *it;
+            std::vector<coordinate> layout = indiv.layout;
+            file << indiv.fitness << "\r\n";
+            file << layout.size() << "\r\n";
+            // We loop through the layout of the individual
+            for (auto it2 = layout.begin(); it2 < layout.end(); ++it2){
+                file << it2->x << " " << it2->y << "\r\n";
+            }
+        }
+        file.close();
+
+    }
+
 
    bool compare_fitness(const individual &indiv,const individual &indiv2) {
       return (indiv.fitness > indiv2.fitness);
