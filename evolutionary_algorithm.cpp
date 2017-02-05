@@ -26,18 +26,13 @@ std::pair<double, double> evolutionary_algorithm(
    
    // the best (lowest) fittness
    double fittest = population.begin()->fitness;
-   // the average fitness of the initial population
-   double avg_fitness = 0.0;
    for (auto& indiv : population) {
-      avg_fitness += indiv.fitness;
       if (fittest > indiv.fitness) {
          fittest = indiv.fitness;
       }
    }
-   avg_fitness /= population.size();
-   
+   double initial_fittest = fittest;
    std::cout << "Initial fittest: " << fittest << std::endl;
-   std::cout << "Initial average: " << avg_fitness << std::endl;
    
    for (int g = 0; g < generations; ++g) {
       // selection step
@@ -72,5 +67,5 @@ std::pair<double, double> evolutionary_algorithm(
         functions::save_population_to_file(file_name, population);
     }
 
-   return{ fittest, avg_fitness - fittest };
+   return{ fittest, initial_fittest - fittest };
 }
