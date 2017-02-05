@@ -26,7 +26,7 @@ void CompetitionEvaluator::initialize(CompetitionScenario& sc, const char* token
   nEvals=0;
   energyCost = std::numeric_limits<double>::max();
   user_token = token;
-  CURL *curl;
+  /*CURL *curl;
   CURLcode res;
   std::string readBuffer;
 
@@ -59,13 +59,14 @@ void CompetitionEvaluator::initialize(CompetitionScenario& sc, const char* token
   curl_slist_free_all(headers);
 
   Json::Value root;
-  Json::Reader reader;
+  Json::Reader reader; std::cout << readBuffer << std::endl;
   bool parsingSuccessful = reader.parse( readBuffer, root, false );
   if ( !parsingSuccessful ) {
     fprintf(stderr, "json parse failed1: %s\n", reader.getFormattedErrorMessages().c_str());
-  }
+  }*/
 
-  run_token = root["token"].asString();
+  run_token = "43DCDOGCSAZ8B9Z7XTM7VZYXE467BJ";
+  //run_token = root["token"].asString();
 
 }
 

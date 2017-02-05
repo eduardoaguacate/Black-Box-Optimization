@@ -62,7 +62,7 @@ std::pair<double, double> evolutionary_algorithm(
          }
       }
       std::cout << "Fittest at generation " << g + 1 << " : " << fittest << endl;
-   }
+   } std::cout << "evals: " << evaluator.getNumberOfEvaluation() << std::endl;
     if (shouldSaveFile){
         functions::save_population_to_file(file_name, population);
     }

@@ -34,7 +34,10 @@ int main(int argc, const char * argv[]) {
 
    srand(time(NULL));
 
-   std::string arg1 = argv[1];
+   std::string arg1;
+   if (argc > 1) {
+      arg1 = argv[1];
+   }
    if (arg1 == "statistical_comparison") {
        int pop_size, generations, iterations;
        std::cout << "Enter the population size: " << std::endl;
@@ -61,8 +64,10 @@ int main(int argc, const char * argv[]) {
           std::cin >> sc_number;
           cscenario.reset(new CompetitionScenario(sc_number));
           scenario.reset(new Scenario(*cscenario));
+          
+          const char* TOKEN = "XQNC1VSQ112N3I45DP56D87RYODN7Z";
           CompetitionEvaluator* cevaluator = new CompetitionEvaluator();
-          cevaluator->initialize(*cscenario, "RFCU5KIPRGAZUAQJH802YJDXNJSWGC");
+          cevaluator->initialize(*cscenario, TOKEN);
           evaluator.reset(cevaluator);
        } else {
           wscenario.reset(new WindScenario(argv[1]));
@@ -85,7 +90,7 @@ int main(int argc, const char * argv[]) {
        if (file.is_open()){
            file >> pop_size;
            file.close();
-       }
+       } 
        else{
            shouldLoadFile = false;
        }
