@@ -5,6 +5,7 @@
  */
 
 //STL libraries
+#include <memory>
 #include <iostream>
 #include <string>
 
@@ -50,23 +51,25 @@ int main(int argc, const char * argv[]) {
        std::cout << "Run against the server? (0/1)" << std::endl;
        std::cin >> serious_mode;
        
-       WindFarmLayoutEvaluator* evaluator;
-       Scenario* scenario;
+       std::unique_ptr<WindFarmLayoutEvaluator> evaluator;
+       std::unique_ptr<CompetitionScenario> cscenario;
+       std::unique_ptr<WindScenario> wscenario;
+       std::unique_ptr<Scenario> scenario;
        if (serious_mode) {
           int sc_number;
           std::cout << "Scenario number? (1 to 5)" << std::endl;
           std::cin >> sc_number;
-          CompetitionScenario cscenario(sc_number);
-          scenario = new Scenario(cscenario);
+          cscenario.reset(new CompetitionScenario(sc_number));
+          scenario.reset(new Scenario(*cscenario));
           CompetitionEvaluator* cevaluator = new CompetitionEvaluator();
-          cevaluator->initialize(cscenario, "XQNC1VSQ112N3I45DP56D87RYODN7Z");
-          evaluator = cevaluator;
+          cevaluator->initialize(*cscenario, "RFCU5KIPRGAZUAQJH802YJDXNJSWGC");
+          evaluator.reset(cevaluator);
        } else {
-          WindScenario wscenario(argv[1]);
-          scenario = new Scenario(wscenario);
+          wscenario.reset(new WindScenario(argv[1]));
+          scenario.reset(new Scenario(*wscenario));
           KusiakLayoutEvaluator* kevaluator = new KusiakLayoutEvaluator();
-          kevaluator->initialize(wscenario);
-          evaluator = kevaluator;
+          kevaluator->initialize(*wscenario);
+          evaluator.reset(kevaluator);
        }
        
        int pop_size = 0;
@@ -105,6 +108,5 @@ int main(int argc, const char * argv[]) {
           shouldSaveFile
           ).first;
        std::cout << "Best " << fitness << std::endl;
-       delete scenario;
    }
 }
