@@ -106,7 +106,7 @@ int main(int argc, const char * argv[]) {
           std::bind(initialization::initialization_2, _1,_2,pop_size),
           std::bind(selection::selection_1, _1, pop_size),
           recombination::crossover,
-          std::bind(mutation::random_reset, 0.25, _1, _2),
+          std::bind(mutation::random_reset, 0.25f, _1, _2),
           std::bind(replacement::replacement_1,_1,_2, pop_size),
           generations,
           shouldLoadFile,

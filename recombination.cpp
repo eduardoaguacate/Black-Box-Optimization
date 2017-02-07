@@ -64,11 +64,20 @@ namespace recombination {
          }
          // copy [cutoff, size] turbines from max_layout
          for (std::size_t i = cutoff; i < size; ++i) {
-            child.layout.push_back(max_layout[i]);
+            auto& coord = max_layout[i];
+            if (!functions::turbine_collides(coord.x, coord.y, scenario, child.layout)) {
+               child.layout.push_back(coord);
+            }
          }
+         
          // create [size, over] new turbines
-         for (std::size_t i = size; i < over; ++i) {
-            child.layout.push_back({ wdist(rng), hdist(rng) });
+         std::size_t child_size = child.layout.size();
+         for (std::size_t i = child_size; i < over; ++i) {
+            double x = wdist(rng);
+            double y = hdist(rng);
+            if (!functions::turbine_collides(x, y, scenario, child.layout)) {
+               child.layout.push_back({ x, y });
+            }
          }
 
          children.push_back(child);

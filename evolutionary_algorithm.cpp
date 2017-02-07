@@ -21,7 +21,7 @@ std::pair<double, double> evolutionary_algorithm(
    std::vector<individual> population = shouldLoadFile ? functions::load_population_from_file(file_name) : initialize(evaluator, scenario);
    std::cout << "Initial population:" << std::endl;
    for (auto& indiv : population){
-     std::cout << indiv.fitness << std::endl;
+     std::cout << indiv.fitness << " : " << indiv.layout.size() << std::endl;
    }
    
    // the best (lowest) fittness
@@ -43,14 +43,13 @@ std::pair<double, double> evolutionary_algorithm(
       for (auto& child : children) {
 	     mutate(child, scenario);
       }
-
-      initialization::replace_violations(children, scenario);
       
       // determine the fitness of the children
       for (auto& child : children) {
          functions::remove_illegal_coordinates(child, scenario);
          auto mat_layout = functions::individual_to_matrix<double>(child.layout);
          child.fitness = evaluator.evaluate(&mat_layout);
+         std::cout << child.fitness << " : " << child.layout.size() << std::endl;
       }
 
       // replacement step
