@@ -76,9 +76,16 @@ namespace functions {
    Matrix<double> individual_to_matrix(Scenario& scenario, double phi, double rw) {
       // create turbines along the rows determined by phi (angle) and rw (row width)
       std::vector<std::pair<double, double>> coords;
-      for (double x = 0.0; x < scenario.width; x += rw) {
+      double ephi = phi > M_PI / 2 ? phi - M_PI / 2 : phi;
+      double min_rw = scenario.R * 8.0001;
+      double erw = std::max(min_rw, std::abs(rw * std::sin(phi)));
+      double erh = std::max(min_rw, std::abs(rw * std::cos(phi)));
+      for (double x = 0.0; x < scenario.width; x += erw) {
          double sy = x * std::cos(phi);
-         for (double y = sy; y < scenario.height; y += scenario.R * 8.0001) {
+         while (sy > 0.0) {
+            sy -= erh;
+         }
+         for (double y = sy; y < scenario.height; y += erh) {
             if (turbine_valid(scenario, x, y)) {
                coords.push_back({ x, y });
             }

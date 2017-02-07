@@ -1,4 +1,5 @@
 build
+different_algorithm/build
 *~
 API/eval.o
 API/GA.o

@@ -12,7 +12,7 @@ namespace initialization {
       std::random_device device;
       std::default_random_engine engine(device());
       // prepare the distributions
-      std::uniform_real_distribution<double> phi_dist(0, M_PI);
+      std::uniform_real_distribution<double> phi_dist(0, M_PI / 2);
       std::uniform_real_distribution<double> rw_dist(scenario.R * 8.001, scenario.R * 16.001);
       
       std::vector<individual> individuals;
