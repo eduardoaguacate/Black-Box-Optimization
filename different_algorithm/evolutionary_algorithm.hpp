@@ -7,44 +7,47 @@
 #ifndef BBO_EVOLUTIONARY_ALGORITHM_HPP
 #define BBO_EVOLUTIONARY_ALGORITHM_HPP
 
-#include <functional>
-
+#include "API/WindFarmLayoutEvaluator.h"
+#include "scenario.hpp"
 #include "structures.hpp"
 
-class WindFarmLayoutEvaluator;
-class WindScenario;
-class Scenario;
+#include <functional>
 
-// maybe move these into the function namespaces?
-using initialization_func = std::function<std::vector<individual>(
-                                             WindFarmLayoutEvaluator&,
-                                             Scenario&)>;
+// the signature of an initialization
+using initialization_func = std::function<std::vector<individual>(const Scenario&)>;
+// the signature of a selection
 using selection_func = std::function<std::vector<std::vector<individual>::iterator>(
                                         std::vector<individual>&)>;
+// the signature of a recombination
 using recombination_func = std::function<std::vector<individual>(
                                             const std::vector<std::vector<individual>::iterator>&,
                                             Scenario&)>;
+// the signature of a mutation
 using mutation_func = std::function<void(individual&, Scenario&)>;
+// the signature of a replacement
 using replacement_func = std::function<std::vector<individual>(
                                        std::vector<individual>&,
                                        std::vector<individual>&)>;
 /*
  * evolutionary_algorithm
  *
- * executes an evolutionary algorithm with the specified functions
+ * executes an evolutionary algorithm with the specified parameters
  *
  * parameters:
- * evaluator - the layout evaluator
- * scenario - the wind scenario to solve
- * initialize - function which initializes the parameter
- * select - function which selects the parents
- * recombine - function which recombines parents
- * mutate - function which mutates children
- * replace - function which updates the population
- * generations - the number of generations until the result is obtained
- * shouldLoadFile - this makes the algorithm load the data from a previous file
- * shouldSaveFile - this makes the algorithm save the data from the population at the end
+ *    evaluator - the layout evaluator
+ *    scenario - the wind scenario to solve
+ *    initialize - function which initializes the population
+ *    select - function which selects the parents
+ *    recombine - function which recombines parents
+ *    mutate - function which mutates children
+ *    replace - function which updates the population
+ *    generations - the number of generations for which the algorithm is run
+ *    should_load - if true, will load the initial population from disk
+ *    should_save - if true, will save the population at the end
  *
+ * returns:
+ *    fittest, improvement - the best fitness overall and the improvement from
+ *                           the initial best fitness to the final one 
  */
 std::pair<double, double> evolutionary_algorithm(
                                   WindFarmLayoutEvaluator& evaluator,
@@ -55,7 +58,7 @@ std::pair<double, double> evolutionary_algorithm(
                                   mutation_func mutate,
                                   replacement_func replace,
                                   int generations,
-                                  bool shouldLoadFile,
-                                  bool shouldSaveFile);
+                                  bool should_load,
+                                  bool should_save);
 
 #endif

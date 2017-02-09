@@ -4,25 +4,38 @@
 #include <random>
 
 namespace mutation {
-   void incremental(double chance, individual& indiv, Scenario& scenario) {
-      // the minimum row distance
-      double min_rw = scenario.R * 8.0001;
+   void incremental(double phi_range, double rw_range, individual& indiv, Scenario& scenario) {
       // prepare the rng
       std::random_device device;
       std::default_random_engine engine(device());
       // prepare the distributions
-      std::uniform_real_distribution<double> phi_dist(-M_PI / 16, M_PI / 16);
-      std::uniform_real_distribution<double> rw_dist(-scenario.R / 4, scenario.R / 4);
+      std::uniform_real_distribution<double> phi_dist(-phi_range * M_PI, phi_range * M_PI);
+      std::uniform_real_distribution<double> rw_dist(-rw_range * scenario.R, rw_range * scenario.R);
 
+      // the minimum angle
+      double min_phi = 0.0;
+      // the maxmimum angle
+      double max_phi = M_PI / 2;
+      // increase/decrease the angle phi
       indiv.phi += phi_dist(engine);
-      if (indiv.phi < 0.0)
-         indiv.phi += M_PI / 2;
-      if (indiv.phi > M_PI / 2)
-         indiv.phi -= M_PI / 2;
+      // enforce the limits
+      if (indiv.phi < min_phi) {
+         indiv.phi += max_phi;
+      } else if (indiv.phi > max_phi) {
+         indiv.phi -= max_phi;
+      }
+      
+      // the minimum row distance
+      double min_rw = scenario.R * 8.0001;
+      // the maxmimum row distance
+      double max_rw = scenario.R * 16.0001;
+      // increase/decrease the row width
       indiv.rw += rw_dist(engine);
-      if (indiv.rw < min_rw)
+      // enforce the limits
+      if (indiv.rw < min_rw) {
          indiv.rw = min_rw;
-      if (indiv.rw > min_rw * 2)
-         indiv.rw = min_rw * 2;
+      } else if (indiv.rw > max_rw) {
+         indiv.rw = max_rw;
+      }
    }
 }

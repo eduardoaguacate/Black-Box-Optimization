@@ -19,22 +19,10 @@ public:
    Scenario(CompetitionScenario& cscenario);
    Scenario(WindScenario& wscenario);
 
-   /*
-    * the maximum number of turbines which a layout can have in this scenario
-    * (CompetitionScenario doesn't have the nturbines attribute)
-    * this is calculated as follows:
-    * area = width * height
-    * areaObstacles = sum of area of all obstacles
-    * maxTurbines = (area - areaObstacles) / (PI*R^2)
-    */
-   int max_turbines;
    double width;
    double height;
    double R;
    Matrix<double>& obstacles;
-
-private:
-   int calculate_max_turbines();
 };
 
 #endif

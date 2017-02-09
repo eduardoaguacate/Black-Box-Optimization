@@ -24,20 +24,18 @@ void statistical_comparison(int pop_size,
    using namespace std::placeholders;
    // create collections of all functions of each type
    std::map<std::string, initialization_func> inits = {
-      { "init_2", std::bind(initialization::init, _1, _2, pop_size) }
+      { "init", std::bind(initialization::init, _1, pop_size) }
    };
    std::map<std::string, selection_func> selects = {
       { "tournament", std::bind(selection::selection_1, _1, pop_size) }
    };
    std::map<std::string, recombination_func> recombines = {
-      { "crossover", recombination::crossover },
-      { "no_recombination", recombination::none }
+      { "averages", recombination::averages }
    };
    std::map<std::string, mutation_func> mutates = {
-      { "incremental(0.25) ", std::bind(mutation::incremental, 0.25f, _1, _2) }
+      { "incremental(1/16, 1/4)", std::bind(mutation::incremental, 0.0625, 0.25, _1, _2) }
    };
    std::map<std::string, replacement_func> replaces = {
-      { "age-based", replacement::age_based },
       { "fitness-based", std::bind(replacement::replacement_1, _1, _2, pop_size) }
    };
 

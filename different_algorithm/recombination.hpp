@@ -20,18 +20,19 @@ namespace recombination {
       Scenario& scenario);
    
    /*
-    * recombination::crossover
+    * recombination::averages
     *
-    * recombines parents by crossover
-    * first randomly determines a cutoff from [0, size]
-    * the childs turbines will then be copied from the parents,
-    * turbines with indices [0, cutoff] from parent a, [cutoff, size] from b
+    * recombines parents by averaging over their attributes
+    * one child is created per pair of parents
     *
     * parameters:
-    * parents - the individuals which were selected for mating
-    * scenario - the wind scenario
+    *    parents - the individuals which were selected for mating
+    *    scenario - the wind scenario
+    *
+    * postconditions:
+    *    the children will NOT have been evaluated yet
     */
-   std::vector<individual> crossover(
+   std::vector<individual> averages(
       const std::vector<std::vector<individual>::iterator>& parents,
       Scenario& scenario);
 }

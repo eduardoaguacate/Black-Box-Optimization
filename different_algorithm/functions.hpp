@@ -6,7 +6,7 @@
 #ifndef BBO_FUNCTIONS_HPP
 #define BBO_FUNCTIONS_HPP
 
-#include "API/Matrix.hpp"
+#include "API/WindFarmLayoutEvaluator.h"
 #include "structures.hpp"
 #include "scenario.hpp"
 
@@ -16,22 +16,38 @@ namespace functions {
     * convert an individual (angle and row width) into a matrix of x and y coordinates
     * which can be sent to the evaluator
     *
+    * parameters:
+    *    scenario - the scenario the layout is based on
+    *    indiv - the inidivdual
     */
-   Matrix<double> individual_to_matrix(Scenario& scenario, double phi, double rw);
+   Matrix<double> individual_to_matrix(Scenario& scenario, const individual& indiv);
+
+   /* 
+    * evaluate_population
+    *
+    * converts individuals into matrices which can be evaluated by the API
+    * then assigns to each individual the fitness value
+    *
+    * parameters:
+    *    evaluator - the evaluator from the API
+    *    scenario - a matching wind scenario
+    *    population - the individuals to evaluate
+    */
+   void evaluate_population(WindFarmLayoutEvaluator& evaluator, Scenario& scenario,
+                            std::vector<individual>& population);
    
    /* compare_fitness
     *
     * This function compares the fitnesses of two individuals
     *
     * params:
-    *     const individual &indiv: the first individual
-    *     const individual &indiv2: the second individual to be compared
+    *     a: the first individual
+    *     b: the second individual to be compared
     *
     * returns:
-    *     bool : true if indiv->fitness is less than indiv2->fitness2
-    *            false otherwise
+    *     true if a.fitness is less than b.fitness, false otherwise
     */
-   bool compare_fitness(const individual &indiv,const individual &indiv2);
+   bool compare_fitness(const individual& a, const individual& b);
     
    /* load_population_from_file
     *
@@ -43,7 +59,7 @@ namespace functions {
     * returns:
     *     std::vector<individual> : the population that is stored in the file
     */
-   std::vector<individual> load_population_from_file(const string file_name);
+   std::vector<individual> load_population_from_file(const std::string& file_name);
     
    /* save_population_to_file
     *
@@ -55,8 +71,7 @@ namespace functions {
     * returns:
     *     void
     */
-   void save_population_to_file(const string file_name,
-                                vector<individual> &pop);
+   void save_population_to_file(const std::string& file_name, const std::vector<individual>& pop);
 }
 
 #endif

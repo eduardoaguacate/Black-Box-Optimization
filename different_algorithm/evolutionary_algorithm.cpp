@@ -1,5 +1,4 @@
 
-#include "API/WindFarmLayoutEvaluator.h"
 #include "evolutionary_algorithm.hpp"
 #include "functions.hpp"
 #include "initialization.hpp"
@@ -14,18 +13,18 @@ std::pair<double, double> evolutionary_algorithm(
                                   mutation_func mutate,
                                   replacement_func replace,
                                   int generations,
-                                  bool shouldLoadFile,
-                                  bool shouldSaveFile) {
+                                  bool should_load,
+                                  bool should_save) {
    // intialization step
-   string file_name = "population.txt";
-   std::vector<individual> population = shouldLoadFile ?
-      functions::load_population_from_file(file_name) : initialize(evaluator, scenario);
-   std::cout << "Initial population:" << std::endl;
-   for (auto& indiv : population){
-      std::cout << indiv.fitness << " : " << indiv.phi << " : " << indiv.rw << std::endl;
-   }
+   std::string file_name = "population.txt";
+   auto population = should_load ?
+      functions::load_population_from_file(file_name) : initialize(scenario);
+   functions::evaluate_population(evaluator, scenario, population);
+   // return if pop_size is 0 or loading failed
+   if (population.empty())
+      return{ 0.0, 0.0 };
    
-   // the best (lowest) fittness
+   // determine the initial best (lowest) fittness
    double fittest = population.begin()->fitness;
    for (auto& indiv : population) {
       if (fittest > indiv.fitness) {
@@ -34,40 +33,45 @@ std::pair<double, double> evolutionary_algorithm(
    }
    double initial_fittest = fittest;
    std::cout << "Initial fittest: " << fittest << std::endl;
-   
+
+   // run the algorithm for the specified number of generations
    for (int g = 0; g < generations; ++g) {
+      // output the population
+      std::cout << "Population after generation " << g << ":\n";
+      for (auto& indiv : population) {
+         std::cout << "fitness: " << indiv.fitness
+                   << ", phi: " << indiv.phi
+                   << ", rw: " << indiv.rw << std::endl;
+      }
+      
       // selection step
-      std::vector<std::vector<individual>::iterator> parents = select(population);
+      auto parents = select(population);
       
       // recombination, mutation step
-      std::vector<individual> children = recombine(parents, scenario);
+      auto children = recombine(parents, scenario);
       for (auto& child : children) {
          mutate(child, scenario);
-      }
-      
+      }      
       // determine the fitness of the children
-      for (auto& child : children) {
-         Matrix<double> matrix = functions::individual_to_matrix(scenario, child.phi, child.rw);
-         child.fitness = evaluator.evaluate(&matrix);
-         std::cout << child.fitness << " : " << child.phi << " : " << child.rw << std::endl;
-      }
+      functions::evaluate_population(evaluator, scenario, children);
 
       // replacement step
       population = replace(population, children);
       // update the fittest member
-      for (auto iter = population.begin(); iter != population.end(); ++iter) {
-         if (fittest > iter->fitness) {
-            fittest = iter->fitness;
+      for (auto& indiv : population) {
+         if (fittest > indiv.fitness) {
+            fittest = indiv.fitness;
          }
       }
-      std::cout << "Fittest at generation " << g + 1 << " : " << fittest << endl;
+      // output the new fittest member
+      std::cout << "Fittest at generation " << g + 1 << " : " << fittest << std::endl;
    }
+   std::cout << "Evaluations used: " << evaluator.getNumberOfEvaluation() << std::endl;
 
-   std::cout << "evals: " << evaluator.getNumberOfEvaluation() << std::endl;
-
-   if (shouldSaveFile){
+   if (should_save) {
       functions::save_population_to_file(file_name, population);
    }
-   
+
+   // return the fittest member and the improvement from initial fittest to now
    return{ fittest, initial_fittest - fittest };
 }
