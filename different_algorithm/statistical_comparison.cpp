@@ -42,7 +42,13 @@ void statistical_comparison(int pop_size,
    // to keep track of the completed ea runs
    int run = 1;
    // to store the results for each combination
-   std::map<std::string, std::pair<double, double>> results;
+   struct Statistic {
+      double fitness_avg; // fitness mean
+      double fitness_dev; // fitness standard deviation
+      double improvement_avg; // improvement mean
+      double improvement_dev; // improvement standard deviation
+   };
+   std::map<std::string, Statistic> statistics;
    // iterate over all combinations
    for (auto& init : inits) {
       for (auto& select : selects) {
@@ -64,7 +70,7 @@ void statistical_comparison(int pop_size,
 
                   // run the algorithm on the scenario
                   // hold the fitness results in a vector
-                  std::vector<double> fitnesses;
+                  std::vector<std::pair<double, double>> results;
                   // determine the average fitness for
                   // this combination of functions and scenario
                   for (int j = 0; j < iterations; ++j) {
@@ -72,34 +78,41 @@ void statistical_comparison(int pop_size,
                      KusiakLayoutEvaluator evaluator;
                      evaluator.initialize(wscenario);
                      // run the ea and store the improvement
-                     double fitness = evolutionary_algorithm(
+                     auto result = evolutionary_algorithm(
                         evaluator, scenario, init.second, select.second,
                         recombine.second, mutate.second, replace.second,
-                        generations, false, false).second;
-                     fitnesses.push_back(fitness);
+                        generations, false, false);
+                     results.push_back(result);
 
                      std::cout << "Run " << run << ", Iteration " << j 
-                               << ": " << fitness << std::endl;
+                               << ": " << result.first 
+                               << ", " << result.second << std::endl;
                      run++;
                   }
                    
                   // compute the average
-                  double average = 0.0;
-                  for (auto& fitness : fitnesses) {
-                     average += fitness;
+                  double fitness_avg = 0.0;
+                  double improvement_avg = 0.0;
+                  for (auto& result : results) {
+                     fitness_avg += result.first;
+                     improvement_avg += result.second;
                   }
-                  average /= iterations;
+                  fitness_avg /= iterations;
+                  improvement_avg /= iterations;
                   // compute the standard deviation
-                  double variance = 0.0;
-                  for (auto& fitness : fitnesses) {
-                     double delta = std::abs(average - fitness);
-                     variance += delta * delta;
+                  double fitness_var = 0.0;
+                  double improvement_var = 0.0;
+                  for (auto& result : results) {
+                     fitness_var += std::abs(std::pow(fitness_avg - result.first, 2));
+                     improvement_var += std::abs(std::pow(improvement_avg - result.second, 2));
                   }
                   if (iterations > 1) {
-                     variance /= iterations - 1;
+                     fitness_var /= iterations - 1;
+                     improvement_var /= iterations - 1;
                   }
-                  double deviation = std::sqrt(variance);
-                  results[name] = { average, deviation };
+                  double fitness_dev = std::sqrt(fitness_var);
+                  double improvement_dev = std::sqrt(improvement_var);
+                  statistics[name] = { fitness_avg, fitness_dev, improvement_avg, improvement_dev };
                }
             }
          }
@@ -108,9 +121,14 @@ void statistical_comparison(int pop_size,
                    
    std::cout << "=== Results in e-6 ===\n";
    const double EXPONENT = std::pow(10, 6);
-   for (auto& result : results) {
-       std::cout << result.first << ": " << result.second.first * EXPONENT
-                 << "+-" << result.second.second * EXPONENT << '\n';
+   for (auto& statistic : statistics) {
+       std::cout << statistic.first << ", Best: " 
+                 << statistic.second.fitness_avg * EXPONENT 
+                 << "+-" << statistic.second.fitness_dev * EXPONENT 
+                 << ", Improvement: "
+                 << statistic.second.improvement_avg * EXPONENT
+                 << "+-" << statistic.second.improvement_dev * EXPONENT 
+                 << '\n';
    }
    std::cout << std::flush;
 }
