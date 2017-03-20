@@ -118,7 +118,7 @@ void start_run() {
       std::bind(initialization::init, _1, pop_size),
       std::bind(selection::selection_1, _1, pop_size),
       recombination::averages,
-      std::bind(mutation::incremental, 0.0625, 0.25, _1, _2),
+      mutation::incremental,
       std::bind(replacement::replacement_1, _1, _2, pop_size),
       generations,
       should_load, should_save);

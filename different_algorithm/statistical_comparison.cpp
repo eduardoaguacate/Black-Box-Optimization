@@ -1,6 +1,7 @@
 #include <algorithm>
 #include <cmath>
 #include <iostream>
+#include <iomanip>
 #include <limits>
 #include <map>
 #include <string>
@@ -33,7 +34,7 @@ void statistical_comparison(int pop_size,
       { "averages", recombination::averages }
    };
    std::map<std::string, mutation_func> mutates = {
-      { "incremental(1/16, 1/4)", std::bind(mutation::incremental, 0.0625, 0.25, _1, _2) }
+      { "incremental(1/16, 1/4)", std::bind(mutation::incremental, _1, _2, _3) }
    };
    std::map<std::string, replacement_func> replaces = {
       { "fitness-based", std::bind(replacement::replacement_1, _1, _2, pop_size) }
@@ -43,6 +44,7 @@ void statistical_comparison(int pop_size,
    int run = 1;
    // to store the results for each combination
    struct Statistic {
+      std::vector<std::pair<double, double>> results;
       double fitness_avg; // fitness mean
       double fitness_dev; // fitness standard deviation
       double improvement_avg; // improvement mean
@@ -84,7 +86,7 @@ void statistical_comparison(int pop_size,
                         generations, false, false);
                      results.push_back(result);
 
-                     std::cout << "Run " << run << ", Iteration " << j 
+                     std::cout << "Run " << run << ", Iteration " << j + 1
                                << ": " << result.first 
                                << ", " << result.second << std::endl;
                      run++;
@@ -112,23 +114,32 @@ void statistical_comparison(int pop_size,
                   }
                   double fitness_dev = std::sqrt(fitness_var);
                   double improvement_dev = std::sqrt(improvement_var);
-                  statistics[name] = { fitness_avg, fitness_dev, improvement_avg, improvement_dev };
+                  statistics[name] = { 
+                     results, 
+                     fitness_avg, fitness_dev, improvement_avg, improvement_dev 
+                  };
                }
             }
          }
       }
    }
                    
+   std::cout << std::fixed << std::setprecision(10);
    std::cout << "=== Results in e-6 ===\n";
    const double EXPONENT = std::pow(10, 6);
    for (auto& statistic : statistics) {
-       std::cout << statistic.first << ", Best: " 
-                 << statistic.second.fitness_avg * EXPONENT 
-                 << "+-" << statistic.second.fitness_dev * EXPONENT 
-                 << ", Improvement: "
-                 << statistic.second.improvement_avg * EXPONENT
-                 << "+-" << statistic.second.improvement_dev * EXPONENT 
-                 << '\n';
+      std::cout << statistic.first << '\n';
+      for (auto& result : statistic.second.results) {
+         std::cout << result.first * EXPONENT << ' ' 
+                   << result.second * EXPONENT << '\n';
+      }
+      std::cout << "Best: " 
+                << statistic.second.fitness_avg * EXPONENT 
+                << "+-" << statistic.second.fitness_dev * EXPONENT 
+                << ", Improvement: "
+                << statistic.second.improvement_avg * EXPONENT
+                << "+-" << statistic.second.improvement_dev * EXPONENT 
+                << '\n';
    }
    std::cout << std::flush;
 }

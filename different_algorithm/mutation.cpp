@@ -4,13 +4,13 @@
 #include <random>
 
 namespace mutation {
-   void incremental(double phi_range, double rw_range, individual& indiv, Scenario& scenario) {
+   void incremental(individual& indiv, int r, Scenario& scenario) {
       // prepare the rng
       std::random_device device;
       std::default_random_engine engine(device());
       // prepare the distributions
-      std::uniform_real_distribution<double> phi_dist(-phi_range * M_PI, phi_range * M_PI);
-      std::uniform_real_distribution<double> rw_dist(-rw_range * scenario.R, rw_range * scenario.R);
+      std::uniform_real_distribution<double> phi_dist(-M_PI / (2 * r), M_PI / (2 * r));
+      std::uniform_real_distribution<double> rw_dist(-scenario.R / r, scenario.R / r);
 
       // the minimum angle
       double min_phi = 0.0;

@@ -26,7 +26,7 @@ namespace mutation {
     * the angle phi will be in the range [0.0, PI / 2]
     * the row width will be in the range [scenario.R * 8, scenario.R * 16]
     */
-   void incremental(double phi_range, double rw_range, individual& indiv, Scenario& scenario);
+   void incremental(individual& indiv, int r, Scenario& scenario);
 }
 
 #endif

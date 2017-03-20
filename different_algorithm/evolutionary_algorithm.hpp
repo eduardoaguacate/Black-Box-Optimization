@@ -23,7 +23,7 @@ using recombination_func = std::function<std::vector<individual>(
                                             const std::vector<std::vector<individual>::iterator>&,
                                             Scenario&)>;
 // the signature of a mutation
-using mutation_func = std::function<void(individual&, Scenario&)>;
+using mutation_func = std::function<void(individual&, int, Scenario&)>;
 // the signature of a replacement
 using replacement_func = std::function<std::vector<individual>(
                                        std::vector<individual>&,

@@ -26,18 +26,31 @@ namespace functions {
       // create turbines along the rows determined by phi (angle) and rw (row width)
       std::vector<std::pair<double, double>> coords;
       double min_rw = scenario.R * 8.0001;
-      double erw = std::max(min_rw, std::abs(indiv.rw * std::sin(indiv.phi)));
-      double erh = std::max(min_rw, std::abs(indiv.rw * std::cos(indiv.phi)));
-      for (double x = 0.0; x < scenario.width; x += erw) {
-         double sy = x * std::tan(indiv.phi);
-         while (sy > erh) {
-            sy -= erh;
-         }
-         for (double y = sy; y < scenario.height; y += erh) {
-            if (turbine_valid(scenario, x, y)) {
-               coords.push_back({ x, y });
+      double erw = std::abs(indiv.rw * std::sin(indiv.phi));
+      double erh = std::abs(indiv.rw * std::cos(indiv.phi));
+      double x = 0.0, y = 0.0;
+      while (x >= -scenario.width) {
+         for (double x2 = x, y2 = y; y2 <= scenario.height;) {
+            if (turbine_valid(scenario, x2, y2)) {
+               coords.push_back({ x2, y2 });
             }
+            x2 += erw;
+            y2 += erh;
          }
+         x -= erh;
+         y += erw;
+      }
+      x = erh; y = -erw;
+      while (x <= scenario.width) {
+         for (double x2 = x, y2 = y; y2 <= scenario.height;) {
+            if (turbine_valid(scenario, x2, y2)) {
+               coords.push_back({ x2, y2 });
+            }
+            x2 += erw;
+            y2 += erh;
+         }
+         x += erh;
+         y -= erw;
       }
 
       // to hold the result
