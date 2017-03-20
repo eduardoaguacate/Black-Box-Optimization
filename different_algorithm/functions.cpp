@@ -29,8 +29,8 @@ namespace functions {
       double erw = std::abs(indiv.rw * std::sin(indiv.phi));
       double erh = std::abs(indiv.rw * std::cos(indiv.phi));
       double x = 0.0, y = 0.0;
-      while (x >= -scenario.width) {
-         for (double x2 = x, y2 = y; y2 <= scenario.height;) {
+      while (x >= -scenario.width && y <= scenario.height) {
+         for (double x2 = x, y2 = y; x2 <= scenario.width && y2 <= scenario.height;) {
             if (turbine_valid(scenario, x2, y2)) {
                coords.push_back({ x2, y2 });
             }
@@ -41,8 +41,8 @@ namespace functions {
          y += erw;
       }
       x = erh; y = -erw;
-      while (x <= scenario.width) {
-         for (double x2 = x, y2 = y; y2 <= scenario.height;) {
+      while (x <= scenario.width && y >= -scenario.height) {
+         for (double x2 = x, y2 = y; x2 <= scenario.width && y2 <= scenario.height;) {
             if (turbine_valid(scenario, x2, y2)) {
                coords.push_back({ x2, y2 });
             }
